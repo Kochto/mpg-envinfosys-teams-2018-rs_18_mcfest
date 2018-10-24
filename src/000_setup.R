@@ -1,16 +1,19 @@
+# Set pathes -------------------------------------------------------------------
+# Automatically set root direcory depending on booted system
+if(Sys.info()["sysname"] == "Windows"){
+  filepath_base = "F:/09_Semester/remote_sensing"
+  .libPaths("F:/rlib")
+} else {
+  filepath_base = "remote_sensing"
+  .libPaths("")
+}
+
+#Set librarys
 libs = c("link2GI",
          "raster",
          "rgdal",
          "sp")
 lapply(libs, require, character.only = TRUE)
-
-# Set pathes -------------------------------------------------------------------
-# Automatically set root direcory depending on booted system
-if(Sys.info()["sysname"] == "Windows"){
-  filepath_base = "F:/09_Semester/remote_sensing"
-} else {
-  filepath_base = "/media/memory/permanent/edu/remote_sensing"
-}
 
 # Set project specific subfolders
 project_folders = c("data/",                                 # data folders

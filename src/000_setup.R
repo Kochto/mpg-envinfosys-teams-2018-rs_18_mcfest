@@ -2,10 +2,10 @@
 # Automatically set root direcory depending on booted system
 if(Sys.info()["sysname"] == "Windows"){
   filepath_base = "F:/09_Semester/remote_sensing"
-  .libPaths("F:/rlib")
+  #.libPaths("F:/rlib")
 } else {
-  filepath_base = "remote_sensing"
-  .libPaths("")
+  filepath_base = "/media/eike/USB_1/09_Semester/remote_sensing"
+  #.libPaths("/media/eike/USB_1/rlib")
 }
 
 #Set librarys

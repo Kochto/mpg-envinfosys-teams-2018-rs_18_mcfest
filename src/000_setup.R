@@ -5,7 +5,7 @@ if(Sys.info()["sysname"] == "Windows"){
   #.libPaths("F:/rlib")
 } else {
   filepath_base = "/media/eike/USB_1/09_Semester/remote_sensing"
-  #.libPaths("/media/eike/USB_1/rlib")
+  #.libPaths("/media/eike/USB_1/lrlib")
 }
 
 #Set librarys

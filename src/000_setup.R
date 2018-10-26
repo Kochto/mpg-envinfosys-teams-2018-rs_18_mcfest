@@ -23,7 +23,7 @@ project_folders = c("data/",                                 # data folders
                     "mpg-envinfosys-teams-2018-rs_18_mcfest/src/",   # source code
                     "mpg-envinfosys-teams-2018-rs_18_mcfest/doc/")   # markdown etc. 
 
-envrmt = initProj(projRootDir = filepath_base, GRASSlocation = "data/grass",
+envrmt = link2GI::initProj(projRootDir = filepath_base, GRASSlocation = "data/grass",
                   projFolders = project_folders, path_prefix = "path_", 
                   global = FALSE)
 

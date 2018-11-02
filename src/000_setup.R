@@ -18,7 +18,7 @@ lapply(libs, require, character.only = TRUE)
 # Set project specific subfolders
 project_folders = c("data/",                                 # data folders
                     "data/aerial/", "data/lidar/", "data/grass/", 
-                    "data/data_mof", "data/tmp/", 
+                    "data/data_mof/", "data/tmp/", "data/aerial_processed/", 
                     "run/", "log/",                          # bins and logging
                     "mpg-envinfosys-teams-2018-rs_18_mcfest/src/",   # source code
                     "mpg-envinfosys-teams-2018-rs_18_mcfest/doc/")   # markdown etc. 

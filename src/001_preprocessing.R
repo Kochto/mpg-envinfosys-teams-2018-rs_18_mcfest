@@ -7,16 +7,22 @@ if (Sys.info()["sysname"] == "Windows"){
 ls <- list.files(paste0(envrmt$path_data_aerial), pattern = ".tif")
 
 #Read Images
-b <- list()
+imagelist <- list()
 for (i in ls){
-  b[[i]] <- stack(paste0(envrmt$path_data_aerial, i))
+  imagelist[[i]] <- brick(paste0(envrmt$path_data_aerial, i))
 }
-names(b) <- 1:length(b)
+names(imagelist) <- 1:length(imagelist)
 
 #Check projections of images
-for (c in b){
+pro <- c()
+for (c in imagelist){
   v <- crs(c)
-  print(v)
+  pro <- c(pro, v)
+}
+if (length(unique(pro))!= 1){
+  print("at least one image has not the same projection")
+} else {
+  print("all projections are equal")
 }
 
 #Read edited Shapefile
@@ -27,16 +33,18 @@ abt<- readOGR(paste0(envrmt$path_data_data_mo, "uwcAbteilung.shp"),
 crs(abt)
 
 #Cropping relevant images (picture one and two do not overlap with the bounding box - no cropping required)
-b3_c <- crop(b$`3`, abt, filename=paste0(envrmt$path_data_aerial_processed, "b3_c.tif"))
-b4_c <- crop(b$`4`, abt, filename=paste0(envrmt$path_data_aerial_processed, "b4_c.tif"))
-b5_c <- crop(b$`5`, abt, filename=paste0(envrmt$path_data_aerial_processed, "b5_c.tif"))
-b6_c <- crop(b$`6`, abt, filename=paste0(envrmt$path_data_aerial_processed, "b6_c.tif"))
-b7_c <- crop(b$`7`, abt, filename=paste0(envrmt$path_data_aerial_processed, "b7_c.tif"))
-b8_c <- crop(b$`8`, abt, filename=paste0(envrmt$path_data_aerial_processed, "b8_c.tif"))
+cropped <- lapply(imagelist[3:length(imagelist)], crop, abt)
+
+#(Optional write out cropped raster)
+for (l in cropped[1:length(cropped)]) {
+  writeRaster(l, filename = paste0(envrmt$path_data_aerial_processed, "cropped", 
+                                   substr(gsub("[.]", "_", names(l)[1]), 1, 15),
+                                   substr(gsub("[.]", "_", names(l)[1]), 18, 19), ".tif"), overwrite=TRUE)
+}
 
 #Merging the "stripes" toghether with the actual images
-b3_4_cm <- mosaic(b3_c, b4_c, fun="min", filename=paste0(envrmt$path_data_aerial_processed, "b3_4_cm.tif"))
-b5_6_cm <- mosaic(b5_c, b6_c, fun="min", filename=paste0(envrmt$path_data_aerial_processed, "b5_6_cm.tif"))
+imagelist_3_4_cm <- mosaic(cropped$`3`,cropped$`4`, fun="min", filename=paste0(envrmt$path_data_aerial_processed, "b3_4_cm.tif"))
+imagelist_5_6_cm <- mosaic(cropped$`5`, cropped$`6`, fun="min", filename=paste0(envrmt$path_data_aerial_processed, "b5_6_cm.tif"))
 
 #creating one mosaic
-img <- merge(b3_4_cm, b5_6_cm, b7_c, b8_c, filename=paste0(envrmt$path_data_aerial_processed, "img.tif"))
+img <- merge(imagelist_3_4_cm, imagelist_5_6_cm, cropped$`7`, cropped$`8`, filename=paste0(envrmt$path_data_aerial_processed, "img.tif"))

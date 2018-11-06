@@ -4,12 +4,12 @@ if (Sys.info()["sysname"] == "Windows"){
   source("/media/eike/USB_1/09_Semester/remote_sensing/mpg-envinfosys-teams-2018-rs_18_mcfest/src/000_setup.R")
 }
 #List files in the data aerial folder
-ls <- list.files(paste0(envrmt$path_data_aerial), pattern = ".tif")
+ls <- list.files(paste0(envrmt$path_data_aerial_org), pattern = ".tif")
 
 #Read Images
 imagelist <- list()
 for (i in ls){
-  imagelist[[i]] <- brick(paste0(envrmt$path_data_aerial, i))
+  imagelist[[i]] <- brick(paste0(envrmt$path_data_aerial_org, i))
 }
 names(imagelist) <- 1:length(imagelist)
 
@@ -27,7 +27,7 @@ if (length(unique(pro))!= 1){
 
 #Read edited Shapefile
 abt<- readOGR(paste0(envrmt$path_data_data_mo, "uwcAbteilung.shp"),
-              layer= ogrListLayers(paste0(envrmt$path_data_data_mo, "uwcAbteilung.shp")))
+              layer= ogrListLayers(paste0(envrmt$path_data_data_mof, "uwcAbteilung.shp")))
 
 #Check projections of Shapefile
 crs(abt)

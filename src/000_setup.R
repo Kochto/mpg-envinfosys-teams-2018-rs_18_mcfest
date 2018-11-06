@@ -1,5 +1,5 @@
 # Set pathes -------------------------------------------------------------------
-# Automatically set root direcory depending on booted system
+# Automatically set root direcory depending on booted system (after path changes.)
 if(Sys.info()["sysname"] == "Windows"){
   filepath_base = "F:/09_Semester/remote_sensing"
   #.libPaths("F:/rlib")
@@ -17,8 +17,8 @@ lapply(libs, require, character.only = TRUE)
 
 # Set project specific subfolders
 project_folders = c("data/",                                 # data folders
-                    "data/aerial/", "data/lidar/", "data/grass/", 
-                    "data/data_mof/", "data/tmp/", "data/aerial_processed/", 
+                    "data/aerial/org/", "data/lidar/org/", "data/grass/", 
+                    "data/data_mof/", "data/tmp/", "data/aerial_processed/",
                     "run/", "log/",                          # bins and logging
                     "mpg-envinfosys-teams-2018-rs_18_mcfest/src/",   # source code
                     "mpg-envinfosys-teams-2018-rs_18_mcfest/doc/")   # markdown etc. 

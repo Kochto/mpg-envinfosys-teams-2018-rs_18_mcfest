@@ -35,7 +35,7 @@ crs(abt)
 #Cropping relevant images (picture one and two do not overlap with the bounding box - no cropping required)
 cropped <- lapply(imagelist[3:length(imagelist)], crop, abt)
 
-#(Optional write out cropped raster)
+#(Optional) write out cropped raster
 for (l in cropped[1:length(cropped)]) {
   writeRaster(l, filename = paste0(envrmt$path_data_aerial_processed, "cropped", 
                                    substr(gsub("[.]", "_", names(l)[1]), 1, 15),

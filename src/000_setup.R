@@ -1,12 +1,14 @@
 # Set pathes -------------------------------------------------------------------
 # Automatically set root direcory depending on booted system (after path changes.)
-if(Sys.info()["sysname"] == "Windows"){
-  filepath_base = "F:/09_Semester/remote_sensing"
-  #.libPaths("F:/rlib")
-} else {
-  filepath_base = "/media/eike/USB_1/09_Semester/remote_sensing"
-  #.libPaths("/media/eike/USB_1/lrlib")
-}
+# if(Sys.info()["sysname"] == "Windows"){
+#   filepath_base = "F:/09_Semester/remote_sensing"
+#   #.libPaths("F:/rlib")
+# } else {
+#   filepath_base = "/media/eike/USB_1/09_Semester/remote_sensing"
+#   #.libPaths("/media/eike/USB_1/lrlib")
+# }
+
+filepath_base = path.expand("~/edu/remote_sensing")
 
 #Set librarys
 libs = c("link2GI",
@@ -28,3 +30,4 @@ envrmt = link2GI::initProj(projRootDir = filepath_base, GRASSlocation = "data/gr
                   global = FALSE)
 
 rasterOptions(tmpdir = envrmt$path_data_tmp)
+

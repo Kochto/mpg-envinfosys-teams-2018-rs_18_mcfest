@@ -8,7 +8,7 @@
 #   #.libPaths("/media/eike/USB_1/lrlib")
 # }
 
-filepath_base = path.expand("~/edu/remote_sensing")
+filepath_base = path.expand("~/edu/mpg-envinsys-plygrnd")
 
 #Set librarys
 libs = c("link2GI",

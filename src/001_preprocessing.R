@@ -1,10 +1,10 @@
-if (Sys.info()["sysname"] == "Windows"){
-  source("F:/09_Semester/mpg-envinsys-plygrnd/mpg-envinfosys-teams-2018-rs_18_mcfest/src/000_setup.R")
-} else {
-  source("/media/eike/USB_1/09_Semester/mpg-envinsys-plygrnd/mpg-envinfosys-teams-2018-rs_18_mcfest/src/000_setup.R")
-}
+# if (Sys.info()["sysname"] == "Windows"){
+#   source("F:/09_Semester/mpg-envinsys-plygrnd/mpg-envinfosys-teams-2018-rs_18_mcfest/src/000_setup.R")
+# } else {
+#   source("/media/eike/USB_1/09_Semester/mpg-envinsys-plygrnd/mpg-envinfosys-teams-2018-rs_18_mcfest/src/000_setup.R")
+# }
 
-#source("~/edu/mpg-envinsys-plygrnd/mpg-envinfosys-teams-2018-rs_18_mcfest/src")
+source("~/edu/mpg-envinsys-plygrnd/mpg-envinfosys-teams-2018-rs_18_mcfest/src")
 
 #List files in the data aerial org folder
 ls <- list.files(paste0(envrmt$path_data_aerial_org), pattern = ".tif")

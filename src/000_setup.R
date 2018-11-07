@@ -1,10 +1,10 @@
-# Set pathes -------------------------------------------------------------------
-# Automatically set root direcory depending on booted system (after path changes.)
+# #Set pathes -------------------------------------------------------------------
+# #Automatically set root direcory depending on booted system (after path changes.)
 # if(Sys.info()["sysname"] == "Windows"){
-#   filepath_base = "F:/09_Semester/remote_sensing"
+#   filepath_base = "F:/09_Semester/mpg-envinsys-plygrnd"
 #   #.libPaths("F:/rlib")
 # } else {
-#   filepath_base = "/media/eike/USB_1/09_Semester/remote_sensing"
+#   filepath_base = "/media/eike/USB_1/09_Semester/mpg-envinsys-plygrnd"
 #   #.libPaths("/media/eike/USB_1/lrlib")
 # }
 

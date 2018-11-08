@@ -5,18 +5,15 @@ date: "8 November 2018"
 output: html_document
 ---
 
-#### Setup Skript und Bilder werden eingeladen und anschließend die Projektionen auf Gleicheit überprüft. Das in QGis geschnittene Shapefile wird eingeladen und nach Überprüfung der Projektion werden die Rasterdateien auf die Bounding Box des Shapefiles zugeschnitten. Die weißen Streifen werden durch Zusammenfügen der betroffenen Bilder entfernt. Das finale Mosaik wird zusammengefügt und geplottet. 
+#### Setup Skript und Bilder werden eingeladen und anschließend die Projektionen auf Gleicheit überprüft. Das in QGis geschnittene Shapefile wird eingeladen und nach Ueerpruefung der Projektion werden die Rasterdateien auf die Bounding Box des Shapefiles zugeschnitten. Die weißen Streifen werden durch Zusammenfuegen der betroffenen Bilder entfernt. Das finale Mosaik wird zusammengefuegt und geplottet. 
 
-#### setup Skript einladen noch nicht über einheitlichen Pfad möglich, da die Speicherkapazität der Uni PC's das nicht zulässt.
+--------------------------------------------------------------------------------------------------------------
+
+#### setup Skript einladen noch nicht über einheitlichen Pfad moeglich, da die Speicherkapazitaet der Uni PC's das nicht zulaesst.
 
 ```{r, message=FALSE}
-if (Sys.info()["sysname"] == "Windows"){
-  source("F:/Uni/mpg-envinsys-plygrnd/mpg-envinfosys-teams-2018-rs_18_mcfest/src/000_setup.R")
-} else {
-  source("/media/eike/USB_1/09_Semester/mpg-envinsys-plygrnd/mpg-envinfosys-teams-2018-rs_18_mcfest/src/000_setup.R")
-}
 
-#source("~/edu/mpg-envinsys-plygrnd/mpg-envinfosys-teams-2018-rs_18_mcfest/src/000_setup.R")
+source("~/edu/mpg-envinsys-plygrnd/mpg-envinfosys-teams-2018-rs_18_mcfest/src/000_setup.R")
 ```
 
 #### Erstellen einer Liste, um dort die Bilder einzuladen.
@@ -35,7 +32,7 @@ for (i in ls){
 names(imagelist) <- 1:length(imagelist)
 ```
 
-#### Überprüfen der Projektionen
+#### Ueberpruefen der Projektionen
 
 ```{r}
 pro <- c()
@@ -58,7 +55,7 @@ abt<- readOGR(paste0(envrmt$path_data_data_mof, "uwcAbteilung.shp"),
               layer= ogrListLayers(paste0(envrmt$path_data_data_mof, "uwcAbteilung.shp")))
 ```
 
-#### Überprüfen der Projektion des Shapefiles
+#### Ueberpruefen der Projektion des Shapefiles
 
 ```{r}
 crs(abt)
@@ -94,5 +91,7 @@ imagelist_5_6_cm <- mosaic(cropped$`5`, cropped$`6`, fun="min", filename=paste0(
 img <- merge(imagelist_3_4_cm, imagelist_5_6_cm, cropped$`7`, cropped$`8`, filename=paste0(envrmt$path_data_aerial_processed, "img.tif"))
 ```
 
-#### Plotten (plotRGB(img)) Failed !! Überarbeiten
-
+#### Plotten 
+```{r}
+img <- plotRGB(brick(paste0(envrmt$path_data_aerial_processed, "img.tif")))
+```

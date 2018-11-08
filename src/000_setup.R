@@ -1,14 +1,14 @@
 #Set pathes -------------------------------------------------------------------
 #Automatically set root direcory depending on booted system (after path changes.)
-if(Sys.info()["sysname"] == "Windows"){
-  filepath_base = "F:/Uni/mpg-envinsys-plygrnd"
-  #.libPaths("F:/rlib")
-} else {
-  filepath_base = "/media/eike/USB_1/09_Semester/mpg-envinsys-plygrnd"
-  #.libPaths("/media/eike/USB_1/lrlib")
-}
+#if(Sys.info()["sysname"] == "Windows"){
+# filepath_base = "F:/Uni/mpg-envinsys-plygrnd"
+#  .libPaths("F:/rlib")
+#} else {
+#  filepath_base = "/media/eike/USB_1/09_Semester/mpg-envinsys-plygrnd"
+#  .libPaths("/media/marvin/Marvin/lrlib")
+#}
 
-#filepath_base = path.expand("~/edu/mpg-envinsys-plygrnd")
+filepath_base = path.expand("~/edu/mpg-envinsys-plygrnd")
 
 #Set librarys
 libs = c("link2GI",

@@ -22,6 +22,7 @@ for (c in imagelist){
   v <- crs(c)
   pro <- c(pro, v)
 }
+pro
 if (length(unique(pro))!= 1){
   print("at least one image has not the same projection")
 } else {

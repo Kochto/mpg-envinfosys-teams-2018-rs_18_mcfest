@@ -5,9 +5,9 @@ date: "8 November 2018"
 output: html_document
 ---
 
-#### Setup Skript und Bilder werden eingeladen und anschließend die Projektionen auf Gleicheit überprüft. Das in QGis geschnittene Shapefile wird eingeladen und nach Überprüfung der Projektion werden die Rasterdateien auf die Bounding Box des Shapefiles zugeschnitten. Die weißen Streifen werden durch Zusammenfügen der betroffenen Bilder entfernt. Das finale Mosaik wird zusammengefügt und geplottet. 
+#### Setup Skript und Bilder werden eingeladen und anschlieÃŸend die Projektionen auf Gleicheit Ã¼berprÃ¼ft. Das in QGis geschnittene Shapefile wird eingeladen und nach ÃœberprÃ¼fung der Projektion werden die Rasterdateien auf die Bounding Box des Shapefiles zugeschnitten. Die weiÃŸen Streifen werden durch ZusammenfÃ¼gen der betroffenen Bilder entfernt. Das finale Mosaik wird zusammengefÃ¼gt und geplottet. 
 
-#### setup Skript
+#### setup Skript einladen noch nicht Ã¼ber einheitlichen Pfad mÃ¶glich, da die SpeicherkapazitÃ¤t der Uni PC's das nicht zulÃ¤sst.
 
 ```{r, message=FALSE}
 if (Sys.info()["sysname"] == "Windows"){
@@ -35,7 +35,7 @@ for (i in ls){
 names(imagelist) <- 1:length(imagelist)
 ```
 
-#### Überprüfen der Projektionen
+#### ÃœberprÃ¼fen der Projektionen
 
 ```{r}
 pro <- c()
@@ -58,9 +58,9 @@ abt<- readOGR(paste0(envrmt$path_data_data_mof, "uwcAbteilung.shp"),
               layer= ogrListLayers(paste0(envrmt$path_data_data_mof, "uwcAbteilung.shp")))
 ```
 
-#### Überprüfen der Projektionen von Shapefile und Rasterdateien
+#### ÃœberprÃ¼fen der Projektion des Shapefiles
 
-```{R}
+```{r}
 crs(abt)
 
 ```
@@ -81,7 +81,7 @@ for (l in cropped[1:length(cropped)]) {
 }
 ```
 
-#### Streifen entfernen
+#### "Streifen" entfernen
 
 ```{r, eval=FALSE, echo=TRUE}
 imagelist_3_4_cm <- mosaic(cropped$`3`,cropped$`4`, fun="min", filename=paste0(envrmt$path_data_aerial_processed, "b3_4_cm.tif"))
@@ -94,5 +94,5 @@ imagelist_5_6_cm <- mosaic(cropped$`5`, cropped$`6`, fun="min", filename=paste0(
 img <- merge(imagelist_3_4_cm, imagelist_5_6_cm, cropped$`7`, cropped$`8`, filename=paste0(envrmt$path_data_aerial_processed, "img.tif"))
 ```
 
-#### Plotten (plotRGB(img)) Failed !! Überarbeiten
+#### Plotten (plotRGB(img)) Failed !! Ãœberarbeiten
 

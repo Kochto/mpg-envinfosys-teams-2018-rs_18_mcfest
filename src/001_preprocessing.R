@@ -1,10 +1,8 @@
-if (Sys.info()["sysname"] == "Windows"){
-  source("F:/Uni/mpg-envinsys-plygrnd/mpg-envinfosys-teams-2018-rs_18_mcfest/src/000_setup.R")
-} else {
-  source("/media/eike/USB_1/09_Semester/mpg-envinsys-plygrnd/mpg-envinfosys-teams-2018-rs_18_mcfest/src/000_setup.R")
-}
+library(envimaR)
+root <- alternativeEnvi(root_folder = "~/edu/mpg-envinsys-plygrnd", alt_env_id = "COMPUTERNAME",
+                alt_env_value = "PCRZP", alt_env_root_folder = "F:\\edu\\mpg-envinsys-plygrnd")
 
-#source("~/edu/mpg-envinsys-plygrnd/mpg-envinfosys-teams-2018-rs_18_mcfest/src")
+source(paste0(root, "/mpg-envinfosys-teams-2018-rs_18_mcfest/src/000_setup.R"))
 
 #List files in the data aerial org folder
 ls <- list.files(paste0(envrmt$path_data_aerial_org), pattern = ".tif")

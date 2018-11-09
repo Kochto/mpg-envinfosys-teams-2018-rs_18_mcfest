@@ -34,19 +34,6 @@ for (l in cropped[1:length(cropped)]) {
                                    substr(gsub("[.]", "_", names(l)[1]), 18, 19), ".tif"), overwrite=TRUE)
 }
 
-ext <- data.frame()##initiate empty dataframe
-for (i in 1:length(imagelist)){
-  ext[1,i]<- i
-  for (j in 1:length(imagelist)-1)#loop iterates trough bricks, and delivers 1 if extent overlap and 0 if not
-    ext[j+1,i] <- compareRaster(imagelist[[i]],imagelist[[j+1]],
-                                extent=TRUE,
-                                rowcol = FALSE,
-                                crs=FALSE,
-                                rotation = FALSE, 
-                                stopiffalse =  FALSE)
-}
-
-
 #Merging the "stripes" toghether with the actual images
 imagelist_3_4_cm <- mosaic(cropped$`3`,cropped$`4`, fun="min", filename=paste0(envrmt$path_data_aerial_processed, "b3_4_cm.tif"))
 imagelist_5_6_cm <- mosaic(cropped$`5`, cropped$`6`, fun="min", filename=paste0(envrmt$path_data_aerial_processed, "b5_6_cm.tif"))

@@ -1,7 +1,7 @@
-root <- envimaR::alternativeEnvi(root_folder = "~/edu/mpg-envinsys-plygrnd", alt_env_id = "COMPUTERNAME",
+root_folder <- envimaR::alternativeEnvi(root_folder = "~/edu/mpg-envinsys-plygrnd", alt_env_id = "COMPUTERNAME",
                 alt_env_value = "PCRZP", alt_env_root_folder = "F:\\edu\\mpg-envinsys-plygrnd")
 
-source(paste0(root, "/mpg-envinfosys-teams-2018-rs_18_mcfest/src/000_setup.R"))
+source(paste0(root_folder, "/mpg-envinfosys-teams-2018-rs_18_mcfest/src/000_setup.R"))
 
 #List files in the data aerial org folder
 ls <- list.files(paste0(envrmt$path_data_aerial_org), pattern = glob2rx("*.tif"))

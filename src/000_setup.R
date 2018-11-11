@@ -21,3 +21,4 @@ envrmt = link2GI::initProj(projRootDir = root_folder, GRASSlocation = "data/gras
                            global = FALSE)
 
 rasterOptions(tmpdir = envrmt$path_data_tmp)
+source(paste0(envrmt$`path_mpg-envinfosys-teams-2018-rs_18_mcfest_src`, "002_functions.R"))

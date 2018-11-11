@@ -1,0 +1,14 @@
+#Database of all sorts of indices calculated from satellite imagery
+ https://www.indexdatabase.de/
+
+
+#function to calculate rgb indices 
+https://github.com/environmentalinformatics-marburg/satelliteTools/blob/master/R/rgbIndices.R
+
+
+#Indices explained
+ http://digitalcommons.unl.edu/cgi/viewcontent.cgi?article=2161&context=usdaarsfacpub
+
+
+#Also DEM from LIDAR will be useful.
+

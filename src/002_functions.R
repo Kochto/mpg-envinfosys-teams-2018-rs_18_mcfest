@@ -95,7 +95,77 @@ rgbIndices<- function(rgb,
       names(NGRDI) <- "NGRDI"
       return(NGRDI)
       
-    }  
+    } else if (item=="ExG"){
+      # NGRDI Normalized green red difference index 
+      cat("\ncalculate Excess Green Index (ExG)")
+      ExG <- 2*green - red - blue 
+      names(ExG) <- "ExG"
+      return(ExG)
+    
+    } else if (item=="ExGR"){
+      # NGRDI Normalized green red difference index 
+      cat("\ncalculate  Excess Green Index - Excess Red Index (ExGR)")
+      ExGR<- (2*green - red - blue) - (1.4*red - green)
+      names(ExGR) <- "ExGR"
+      return(ExGR)
+      
+    } else if (item=="VEG"){
+      # NGRDI Normalized green red difference index 
+      cat("\ncalculate  Vegetative Index (VEG)")
+      VEG<- green / (red**0.667 * blue**0.333)
+      names(VEG) <- "VEG"
+      return(VEG)
+      
+    } else if (item=="CIVE"){
+      # NGRDI Normalized green red difference index 
+      cat("\ncalculate Color Index of Vegetation Extraction (CIVE)")
+      CIVE<- 0.441*red - 0.881*green + 0.385*blue + 18.78745
+      names(CIVE) <- "CIVE"
+      return(CIVE)
+      
+    } else if (item=="COM"){
+      # NGRDI Normalized green red difference index 
+      cat("\ncalculate Combined Index (COM)")
+      COM<- 0.25*(2*green - red - blue) + 0.3* ((2*green - red - blue) - (1.4*red - green)) + 0.33* (0.441*red - 0.881*green + 0.385*blue + 18.78745) + 0.12* (green / (red**0.667 * blue**0.333))
+      names(COM) <- "COM"
+      return(COM)
+      
+    } else if (item=="CEV"){
+      # NGRDI Normalized green red difference index 
+      cat("\ncalculate Combination aus Ponti (CEV)")
+      CEV<- 0.33*((1 - abs((red - 30) / (red + 30))) * (1 - abs((green - 50) / (green + 50))) * (1 - abs((blue - 1) / (blue + 1)))) + 0.33*(2*green - red - blue) + 0.33*(0.441*red - 0.881*green + 0.385*blue + 18.78745)
+      names(CEV) <- "CEV"
+      return(CEV)
+    
+    } else if (item=="CEV_gew"){
+      # NGRDI Normalized green red difference index 
+      cat("\ncalculate Combination aus Ponti (CEV_gew)")
+      CEV_gew<- 0.4*((1 - abs((red - 30) / (red + 30))) * (1 - abs((green - 50) / (green + 50))) * (1 - abs((blue - 1) / (blue + 1)))) + 0.2*(2*green - red - blue) + 0.4*(0.441*red - 0.881*green + 0.385*blue + 18.78745)
+      names(CEV_gew) <- "CEV_gew"
+      return(CEV_gew)
+    
+    } else if (item=="CEV_ohne"){
+      # NGRDI Normalized green red difference index 
+      cat("\ncalculate Combination aus Ponti (CEV_ohne)")
+      CEV_ohne<- ((1 - abs((red - 30) / (red + 30))) * (1 - abs((green - 50) / (green + 50))) * (1 - abs((blue - 1) / (blue + 1)))) + (2*green - red - blue) + (0.441*red - 0.881*green + 0.385*blue + 18.78745)
+      names(CEV_ohne) <- "CEV_ohne"
+      return(CEV_ohne)
+      
+    } else if (item=="mcfesti"){
+      # NGRDI Normalized green red difference index 
+      cat("\ncalculate mcfesti (mcfesti)")
+      mcfesti <- 0.25*(sqrt((red**2+green**2+blue*2)/3)) + 0.25*(0.441*red - 0.881*green + 0.385*blue + 18.78745) + 0.25*((1 - abs((red - 30) / (red + 30))) * (1 - abs((green - 50) / (green + 50))) * (1 - abs((blue - 1) / (blue + 1)))) + 0.25*(-0.5*(190*(red - green)- 120*(red - blue)))
+      names(mcfesti) <- "mcfesti"
+      return(mcfesti)
+    }
+    
+      else if (item=="test"){
+      # NGRDI Normalized green red difference index 
+      cat("\ncalculate mcfesti (test)")
+      test <- ((red - 2*green)/(red + 2*green)) + blue
+      names(test) <- "test"
+      return(test)
+  }
   })
   return(raster::stack(indices))
 }

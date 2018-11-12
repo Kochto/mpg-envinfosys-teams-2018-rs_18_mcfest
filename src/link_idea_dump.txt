@@ -11,4 +11,3 @@ https://github.com/environmentalinformatics-marburg/satelliteTools/blob/master/R
 
 
 #Also DEM from LIDAR will be useful.
-

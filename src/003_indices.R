@@ -6,14 +6,15 @@ source(paste0(root_folder, "/mpg-envinfosys-teams-2018-rs_18_mcfest/src/000_setu
 img <- stack(paste0(envrmt$path_data_aerial_processed, "img.tif"))
 
 indices <- rgbIndices(img, rgbi = c("VVI","BI","TGI","GLI", "CIVE", "CEV", "mcfesti"))
+
 for (l in indices[1:length(indices)]) {
   writeRaster(l, filename = paste0(envrmt$path_data_aerial_processed, names(l), "index.tif"), overwrite=TRUE)
 }
 
+#writeRaster(indices$CEV, filename = paste0(envrmt$path_data_aerial_processed, names(indices$CEV), "index.tif"), overwrite=TRUE)
 
 plot(indices, col = gray.colors(10, start = 0.3, end = 0.9, gamma = 2.2, alpha = NULL))
 saveRDS(indices, file = paste0(envrmt$path_data_aerial_processed, "indices.rds"))
-writeRaster(indices[1:2], filename = paste0(envrmt$path_data_aerial_processed, "indices.tif"), bylayer=TRUE, suffix=names(indices))
 
 # tgi <- rgbIndices(img, rgbi = c("TGI"))
 # plot(indices, col = gray.colors(10, start = 0.3, end = 0.9, gamma = 2.2, alpha = NULL))

@@ -15,8 +15,13 @@ indices <- stack(paste0(envrmt$path_data_aerial_processed, list.files(paste0(env
 #writeRaster(indices$CEV, filename = paste0(envrmt$path_data_aerial_processed, names(indices$CEV), "index.tif"), overwrite=TRUE)
 
 plot(indices, col = grey.colors(10, start = 0.3, end = 0.9, gamma = 2.2, alpha = NULL))
-plot(indices$GLIindex, col = colorRamps::ygobb(21))
+plot(indices$mcfestiindex, col = grey.colors(10, start = 0.3, end = 0.9, gamma = 2.2, alpha = NULL))
 saveRDS(indices, file = paste0(envrmt$path_data_aerial_processed, "indices.rds"))
+
+pcastack <- stack(indices$CIVEindex, indices$BIindex, indices$TGIindex, indices$VVIindex)
+pcamcfest <- RStoolbox::rasterPCA(pcastack)
 
 # tgi <- rgbIndices(img, rgbi = c("TGI"))
 # plot(indices, col = gray.colors(10, start = 0.3, end = 0.9, gamma = 2.2, alpha = NULL))
+
+#RS TOOLBOX BIB - Hauptkomponentenanalyse rasterPCA 

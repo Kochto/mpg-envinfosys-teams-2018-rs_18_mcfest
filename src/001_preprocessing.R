@@ -18,8 +18,8 @@ if (length(unique(pro)) == 1){
 }
 
 #Read edited Shapefile
-abt<- readOGR(paste0(envrmt$path_data_data_mof, "uwcAbteilung.shp"),
-              layer= ogrListLayers(paste0(envrmt$path_data_data_mof, "uwcAbteilung.shp")))
+abt<- readOGR(paste0(envrmt$path_data_mof, "uwcAbteilung.shp"),
+              layer= ogrListLayers(paste0(envrmt$path_data_mof, "uwcAbteilung.shp")))
 
 #Check projections of Shapefile
 crs(abt)

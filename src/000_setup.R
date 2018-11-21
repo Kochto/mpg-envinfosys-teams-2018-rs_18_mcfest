@@ -7,9 +7,10 @@ lapply(libs, require, character.only = TRUE)
 
 # Set project specific subfolders
 project_folders = c("data/",                                 # data folders
-                    "data/aerial/org/", "data/lidar/org/", "data/grass/", 
-                    "data/data_mof/", "data/tmp/", "data/aerial_processed/",
-                    "run/", "log/",                          # bins and logging
+                    "data/aerial/org/", "data/lidar/org/", "data/lidar/segtest/", "data/lidar/segtest/laubtest/", "data/lidar/segtest/nadeltest/",
+                    "data/lidar/segtest/nadel_laub_test/", "data/grass/", 
+                    "data/mof/", "data/tmp/", "data/aerial_processed/",
+                    "run/", "log/", "data/lidar/",                  # bins and logging
                     "mpg-envinfosys-teams-2018-rs_18_mcfest/src/",   # source code
                     "mpg-envinfosys-teams-2018-rs_18_mcfest/doc/")   # markdown etc. 
 

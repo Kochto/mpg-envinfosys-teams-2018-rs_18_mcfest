@@ -7,6 +7,7 @@ img <- stack(paste0(envrmt$path_data_aerial_processed, "img.tif"))
 
 indices <- stack(paste0(envrmt$path_data_aerial_processed, list.files(paste0(envrmt$path_data_aerial_processed), pattern=glob2rx("*index.tif"))))
 
+plot(indices)
 #indices <- rgbIndices(img, rgbi = c("VVI","BI","TGI","GLI", "CIVE", "CEV", "mcfesti"))
 # for (l in indices[[1:length(indices)]]) {
 #   writeRaster(l, filename = paste0(envrmt$path_data_aerial_processed, names(l), "index.tif"), overwrite=TRUE)

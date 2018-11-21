@@ -16,7 +16,7 @@ laub <- raster::raster(paste0(envrmt$path_data_lidar_segtest, "laubtest.tif"))
 
 lin <- function(x){x * 0.05 + 0.6}
 
-laubFT <- uavRst::treepos_FT(chm=laub ,minTreeAlt = 2, maxCrownArea = 150)
+laubFT <- uavRst::treepos_FT(chm=laub ,minTreeAlt = 2, maxCrownArea = 70)
 
 #Parameter to play around with
 path_run <- envrmt$path_run
@@ -27,12 +27,12 @@ laubGWS <- uavRst::treepos_GWS(chm=laub, minTreeAlt = 2, minCrownArea = 3, maxCr
 
 laubLIDR <- uavRst::treepos_lidR(chm = laub, movingWin = 3, minTreeAlt = 2)
 
-laubRL <- uavRst::treepos_RL(chm=laub, movingWin = 3, minTreeAlt = 2)
+laubRL <- uavRst::treepos_RL(chm=laub, movingWin = 7, minTreeAlt = 5)
 
 #Crowns für gesamtes Bild in Tiles rechnen, mit hoher überlappung
 crlaubFT <- uavRst::chmseg_FT(treepos = laubFT, chm = laub, minTreeAlt = 2, format = "polygons")
 
-crlaubITC <- uavRst::chmseg_ITC(chm = laub, EPSG = 25832, minTreeAlt = 2, maxCrownArea = 150)
+crlaubITC <- uavRst::chmseg_ITC(chm = laub, EPSG = 25832, minTreeAlt = 2, maxCrownArea = 150, movingWin = 7)
 
 #Parameter to play around with
 crlaubGWS <- uavRst::chmseg_GWS(chm = laub , treepos = laubGWS, minTreeAlt = 2,
@@ -41,7 +41,7 @@ crlaubGWS <- uavRst::chmseg_GWS(chm = laub , treepos = laubGWS, minTreeAlt = 2,
                                thVarSpatial = 1.,
                                thSimilarity = 0.00001,
                                giLinks = giLinks)
-
+path_output <- paste0(envrmt$path_data_lidar_segtest_laubtest)
 crlaubRL <- uavRst::chmseg_RL(treepos = laubRL, chm = laub, maxCrownArea = 150, exclusion = 0)
 
 
@@ -56,12 +56,12 @@ nadellaub <- raster::raster(paste0(envrmt$path_data_lidar_segtest, "nadel_laub_t
 
 lin <- function(x){x * 0.05 + 0.6}
 
-nadellaubFT <- uavRst::treepos_FT(chm=nadellaub ,minTreeAlt = 2, maxCrownArea = 150)
+nadellaubFT <- uavRst::treepos_FT(chm=nadellaub ,minTreeAlt = 2, maxCrownArea = 75)
 
 #Parameter to play around with
 path_run <- envrmt$path_run
 path_tmp <- envrmt$path_data_tmp
-nadellaubGWS <- uavRst::treepos_GWS(chm=nadellaub, minTreeAlt = 2, minCrownArea = 3, maxCrownArea = 150, 
+nadellaubGWS <- uavRst::treepos_GWS(chm=nadellaub, minTreeAlt = 7, minCrownArea = 3, maxCrownArea = 150, 
                                join = 1, thresh = 0.35, split = TRUE, 
                                cores = 2, giLinks = giLinks)
 
@@ -72,10 +72,10 @@ nadellaubRL <- uavRst::treepos_RL(chm=nadellaub, movingWin = 3, minTreeAlt = 2)
 #Crowns für gesamtes Bild in Tiles rechnen, mit hoher überlappung
 crnadellaubFT <- uavRst::chmseg_FT(treepos = nadellaubFT, chm = nadellaub, minTreeAlt = 2, format = "polygons")
 
-crnadellaubITC <- uavRst::chmseg_ITC(chm = nadellaub, EPSG = 25832, minTreeAlt = 2, maxCrownArea = 150)
+crnadellaubITC <- uavRst::chmseg_ITC(chm = nadellaub, EPSG = 25832, minTreeAlt = 5, maxCrownArea = 150)
 
 #Parameter to play around with
-crnadellaubGWS <- uavRst::chmseg_GWS(chm = nadellaub , treepos = nadellaubGWS, minTreeAlt = 2,
+crnadellaubGWS <- uavRst::chmseg_GWS(chm = nadellaub , treepos = nadellaubGWS, minTreeAlt = 7,
                                 neighbour = 0,
                                 thVarFeature = 1.,
                                 thVarSpatial = 1.,
@@ -85,7 +85,7 @@ crnadellaubGWS <- uavRst::chmseg_GWS(chm = nadellaub , treepos = nadellaubGWS, m
 crnadellaubRL <- uavRst::chmseg_RL(treepos = nadellaubRL, chm = nadellaub, maxCrownArea = 150, exclusion = 0)
 
 
-writeOGR(crnadellaubFT, paste0(envrmt$path_data_lidar_segtest_nadel_laub_test, "crnadellaubFT.shp"), "crnadellaubFT", driver="ESRI Shapefile")
+writeOGR(crnadellaubFT, paste0(envrmt$path_data_lidar_segtest_nadel_laub_test, "crnadellaubFTfunar.shp"), "crnadellaubFTfunar", driver="ESRI Shapefile")
 writeOGR(crnadellaubITC, paste0(envrmt$path_data_lidar_segtest_nadel_laub_test, "crnadellaubITC.shp"), "crnadellaubITC", driver="ESRI Shapefile")
 writeOGR(crnadellaubGWS, paste0(envrmt$path_data_lidar_segtest_nadel_laub_test, "crnadellaubGWS.shp"), "crnadellaubGWS", driver= "ESRI Shapefile")
 writeOGR(crnadellaubRL, paste0(envrmt$path_data_lidar_segtest_nadel_laub_test, "crnadellaubRL.shp"), "crnadellaubRL", driver= "ESRI Shapefile")
@@ -96,7 +96,7 @@ nadel <- raster::raster(paste0(envrmt$path_data_lidar_segtest, "nadeltest.tif"))
 
 lin <- function(x){x * 0.05 + 0.6}
 
-nadelFT <- uavRst::treepos_FT(chm=nadel ,minTreeAlt = 2, maxCrownArea = 150)
+nadelFT <- uavRst::treepos_FT(chm=nadel ,minTreeAlt = 2, maxCrownArea = 150, winFun = lin)
 
 #Parameter to play around with
 path_run <- envrmt$path_run
@@ -112,7 +112,7 @@ nadelRL <- uavRst::treepos_RL(chm=nadel, movingWin = 3, minTreeAlt = 2)
 #Crowns für gesamtes Bild in Tiles rechnen, mit hoher überlappung
 crnadelFT <- uavRst::chmseg_FT(treepos = nadelFT, chm = nadel, minTreeAlt = 2, format = "polygons")
 
-crnadelITC <- uavRst::chmseg_ITC(chm = nadel, EPSG = 25832, minTreeAlt = 2, maxCrownArea = 150)
+crnadelITC <- uavRst::chmseg_ITC(chm = nadel, EPSG = 25832, minTreeAlt = 2, maxCrownArea = 150, movingWin = 3)
 
 #Parameter to play around with
 crnadelGWS <- uavRst::chmseg_GWS(chm = nadel , treepos = nadelGWS, minTreeAlt = 2,
@@ -126,6 +126,6 @@ crnadelRL <- uavRst::chmseg_RL(treepos = nadelRL, chm = nadel, maxCrownArea = 15
 
 
 writeOGR(crnadelFT, paste0(envrmt$path_data_lidar_segtest_nadeltest, "crnadelFT.shp"), "crnadelFT", driver="ESRI Shapefile")
-writeOGR(crnadelITC, paste0(envrmt$path_data_lidar_segtest_nadeltest, "crnadelITC.shp"), "crnadelITC", driver="ESRI Shapefile")
+writeOGR(crnadelITC, paste0(envrmt$path_data_lidar_segtest_nadeltest, "crnadelITCmov3.shp"), "crnadelITCmov3", driver="ESRI Shapefile")
 writeOGR(crnadelGWS, paste0(envrmt$path_data_lidar_segtest_nadeltest, "crnadelGWS.shp"), "crnadelGWS", driver= "ESRI Shapefile")
 writeOGR(crnadelRL, paste0(envrmt$path_data_lidar_segtest_nadeltest, "crnadelRL.shp"), "crnadelRL", driver= "ESRI Shapefile")

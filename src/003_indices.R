@@ -3,26 +3,37 @@ root_folder <- envimaR::alternativeEnvi(root_folder = "~/edu/mpg-envinsys-plygrn
 
 source(paste0(root_folder, "/mpg-envinfosys-teams-2018-rs_18_mcfest/src/000_setup.R"))
 
-img <- stack(paste0(envrmt$path_data_aerial_processed, "img.tif"))
-
-indices <- stack(paste0(envrmt$path_data_aerial_processed, list.files(paste0(envrmt$path_data_aerial_processed), pattern=glob2rx("*index.tif"))))
-
-plot(indices)
+# img <- stack(paste0(envrmt$path_data_aerial_processed, "img.tif"))
 #indices <- rgbIndices(img, rgbi = c("VVI","BI","TGI","GLI", "CIVE", "CEV", "mcfesti"))
 # for (l in indices[[1:length(indices)]]) {
 #   writeRaster(l, filename = paste0(envrmt$path_data_aerial_processed, names(l), "index.tif"), overwrite=TRUE)
 # }
 
-#writeRaster(indices$CEV, filename = paste0(envrmt$path_data_aerial_processed, names(indices$CEV), "index.tif"), overwrite=TRUE)
+# indices <- stack(paste0(envrmt$path_data_aerial_processed, 
+#                         list.files(paste0(envrmt$path_data_aerial_processed), pattern=glob2rx("*index.tif"))))
 
-plot(indices, col = grey.colors(10, start = 0.3, end = 0.9, gamma = 2.2, alpha = NULL))
-plot(indices$mcfestiindex, col = grey.colors(10, start = 0.3, end = 0.9, gamma = 2.2, alpha = NULL))
-saveRDS(indices, file = paste0(envrmt$path_data_aerial_processed, "indices.rds"))
-
-pcastack <- stack(indices$CIVEindex, indices$BIindex, indices$TGIindex, indices$VVIindex)
-pcamcfest <- RStoolbox::rasterPCA(pcastack)
-
-# tgi <- rgbIndices(img, rgbi = c("TGI"))
-# plot(indices, col = gray.colors(10, start = 0.3, end = 0.9, gamma = 2.2, alpha = NULL))
+# plot(indices, col = grey.colors(10, start = 0.3, end = 0.9, gamma = 2.2, alpha = NULL))
+# plot(indices$mcfestiindex, col = grey.colors(10, start = 0.3, end = 0.9, gamma = 2.2, alpha = NULL))
 
 #RS TOOLBOX BIB - Hauptkomponentenanalyse rasterPCA 
+pcastack <- stack(indices$CIVEindex, indices$BIindex, indices$TGIindex, indices$VVIindex)
+pcamcfest <- RStoolbox::rasterPCA(pcastack)
+# writeRaster(pcamcfest$map$PC1, filename = paste0(envrmt$path_data_aerial_processed, "pcamcfest1.tif"), overwrite=TRUE)
+# writeRaster(pcamcfest$map$PC2, filename = paste0(envrmt$path_data_aerial_processed, "pcamcfest2.tif"), overwrite=TRUE)
+
+indices <- stack(paste0(envrmt$path_data_aerial_processed, list.files(paste0(envrmt$path_data_aerial_processed), pattern=glob2rx("*index.tif"))[c(2, 4, 5)]), 
+                 paste0(envrmt$path_data_aerial_processed, "pcamcfest1.tif"))
+########Filter
+kx = matrix(c(-1,-2,-1,0,0,0,1,2,1), ncol=3)
+ky = matrix(c(1,0,-1,2,0,-2,1,0,-1), ncol=3)
+k = (kx**2 + ky**2)**0.5
+sobel_raster <- focal(indices$pcamcfest1, w=k)
+
+
+lap <- matrix(c(0,1,0,1,-4,1,0,1,0), nrow=3)
+laplacian <- raster::focal(indices$pcamcfest1, w = lap)
+
+
+par(mfrow = c(1,2))
+plot(sobel_raster)
+plot(indices$pcamcfest1)

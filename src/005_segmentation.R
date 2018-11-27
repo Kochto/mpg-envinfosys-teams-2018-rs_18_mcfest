@@ -10,7 +10,8 @@ giLinks$grass<-link2GI::linkGRASS7(returnPath = TRUE)
 
 #To visually test the accuracy of the applied treepos and chmseg algorithms.
 #Testing is done in three scenarios leaf, leaf_boreal, boreal.
-# =============================================================
+
+#Laubtest=============================================================
 # Laubtest
 laub <- raster::raster(paste0(envrmt$path_data_lidar_segtest, "laubtest.tif"))
 
@@ -50,7 +51,7 @@ writeOGR(crlaubITC, paste0(envrmt$path_data_lidar_segtest_laubtest, "crlaubITC.s
 writeOGR(crlaubGWS, paste0(envrmt$path_data_lidar_segtest_laubtest, "crlaubGWS.shp"), "crlaubGWS", driver= "ESRI Shapefile")
 writeOGR(crlaubRL, paste0(envrmt$path_data_lidar_segtest_laubtest, "crlaubRL.shp"), "crlaubRL", driver= "ESRI Shapefile")
 
-#====================================================================
+#Nadel Laub Test====================================================================
 #Laub Nadel Mix
 nadellaub <- raster::raster(paste0(envrmt$path_data_lidar_segtest, "nadel_laub_test.tif"))
 
@@ -90,7 +91,7 @@ writeOGR(crnadellaubITC, paste0(envrmt$path_data_lidar_segtest_nadel_laub_test, 
 writeOGR(crnadellaubGWS, paste0(envrmt$path_data_lidar_segtest_nadel_laub_test, "crnadellaubGWS.shp"), "crnadellaubGWS", driver= "ESRI Shapefile")
 writeOGR(crnadellaubRL, paste0(envrmt$path_data_lidar_segtest_nadel_laub_test, "crnadellaubRL.shp"), "crnadellaubRL", driver= "ESRI Shapefile")
 
-#====================================================================
+#Nadeltest====================================================================
 #Nadel
 nadel <- raster::raster(paste0(envrmt$path_data_lidar_segtest, "nadeltest.tif"))
 

@@ -7,7 +7,7 @@ giLinks <- list()
 giLinks$saga<-link2GI::linkSAGA()
 giLinks$otb<-link2GI::linkOTB()
 giLinks$grass<-link2GI::linkGRASS7(returnPath = TRUE)
-
+  
 #To visually test the accuracy of the applied treepos and chmseg algorithms.
 #Testing is done in three scenarios leaf, leaf_boreal, boreal.
 
@@ -55,9 +55,16 @@ writeOGR(crlaubRL, paste0(envrmt$path_data_lidar_segtest_laubtest, "crlaubRL.shp
 #Laub Nadel Mix
 nadellaub <- raster::raster(paste0(envrmt$path_data_lidar_segtest, "nadel_laub_test.tif"))
 
+#To test if 3 by 3 focal mean has an impact see master thesis finn
+kx = matrix(c(-1,-2,-1,0,0,0,1,2,1), ncol=3)
+ky = matrix(c(1,0,-1,2,0,-2,1,0,-1), ncol=3)
+k = (kx**2 + ky**2)**0.5
+nadellaub <- raster::focal(nadellaub, w=k)
+
+
 lin <- function(x){x * 0.05 + 0.6}
 
-nadellaubFT <- uavRst::treepos_FT(chm=nadellaub ,minTreeAlt = 2, maxCrownArea = 75)
+nadellaubFT <- uavRst::treepos_FT(chm=nadellaub ,minTreeAlt = 2, maxCrownArea = 75, winFun = lin)
 
 #Parameter to play around with
 path_run <- envrmt$path_run

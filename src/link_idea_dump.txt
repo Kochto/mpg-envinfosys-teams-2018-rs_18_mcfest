@@ -11,3 +11,39 @@ https://github.com/environmentalinformatics-marburg/satelliteTools/blob/master/R
 
 
 #Also DEM from LIDAR will be useful.
+
+#Filter Ideas
+#mean 5 pix 2,5m
+#mean 15 pix 7,5m
+#mean 21 pix 10,5m
+#mean 31 pix 15,5m
+
+#sobel 5 pix 2,5m
+#sobel 15 pix 7,5m
+#sobel 21 pix 10,5m
+#sobel 31 pix 15,5m
+
+#gauss 5 pix 2,5m
+#gauss 15 pix 7,5m
+#gauss 21 pix 10,5m
+#gauss 31 pix 15,5m
+
+#laplace 5 pix 2,5m
+#laplace 15 pix 7,5m
+#laplace 21 pix 10,5m
+#laplace 31 pix 15,5m
+
+#glcm1 5 pix 2,5m
+#glcm1 15 pix 7,5m
+#glcm1 21 pix 10,5m
+#glcm1 31 pix 15,5m
+
+#glcm2 5 pix 2,5m
+#glcm2 15 pix 7,5m
+#glcm2 21 pix 10,5m
+#glcm2 31 pix 15,5m
+
+#haralick 5 pix 2,5m
+#haralick 15 pix 7,5m
+#haralick 21 pix 10,5m
+#haralick 31 pix 15,5m

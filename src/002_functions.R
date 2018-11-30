@@ -190,7 +190,7 @@ fil <- function(rs, filters = c("mean3","mean5","mean7","sd3","sd5","sd7","sbh3"
       names(mean3) <- "mean3"
       return(mean3)
       
-    }else if (item == "mean5"){
+    } else if (item == "mean5"){
       
       cat("\napplying 5x5 mean filter")
       
@@ -198,7 +198,7 @@ fil <- function(rs, filters = c("mean3","mean5","mean7","sd3","sd5","sd7","sbh3"
       names(mean5) <- "mean5"
       return(mean5)
       
-      }else if (item == "mean7"){
+    } else if (item == "mean7"){
 
       cat("\napplying 7x7 mean filter")
 
@@ -206,7 +206,7 @@ fil <- function(rs, filters = c("mean3","mean5","mean7","sd3","sd5","sd7","sbh3"
       names(mean7) <- "mean7"
       return(mean7)
 
-      }else if (item == "sd3") {
+    } else if (item == "sd3") {
 
       cat("\napplying 3x3 standard deviation filter")
 
@@ -214,7 +214,7 @@ fil <- function(rs, filters = c("mean3","mean5","mean7","sd3","sd5","sd7","sbh3"
       names(sd3) <- "sd3"
       return(sd3)
 
-      }else if (item == "sd5"){
+    } else if (item == "sd5"){
 
       cat("\napplying 5x5 standard deviation filter")
 
@@ -222,7 +222,7 @@ fil <- function(rs, filters = c("mean3","mean5","mean7","sd3","sd5","sd7","sbh3"
       names(sd5) <- "sd5"
       return(sd5)
 
-      }else if (item == "sd7"){
+    } else if (item == "sd7"){
 
       cat("\napplying 7x7 standard deviation filter")
 
@@ -230,7 +230,7 @@ fil <- function(rs, filters = c("mean3","mean5","mean7","sd3","sd5","sd7","sbh3"
       names(sd7) <- "sd7"
       return(sd7)
 
-      }else if (item == "sbh3") {
+    } else if (item == "sbh3") {
 
       cat("\napplying sobel 3x3 horizontal filter")
 
@@ -238,7 +238,7 @@ fil <- function(rs, filters = c("mean3","mean5","mean7","sd3","sd5","sd7","sbh3"
       names(sbh3) <- "sbh3"
       return(sbh3)
 
-      }else if (item == "sbv3"){
+    } else if (item == "sbv3"){
 
       cat("\napplying sobel 3x3 vertical filter")
 
@@ -246,7 +246,7 @@ fil <- function(rs, filters = c("mean3","mean5","mean7","sd3","sd5","sd7","sbh3"
       names(sbv3) <- "sbv3"
       return(sbv3)
       
-    }else if (item == "sbh5"){
+    } else if (item == "sbh5"){
       
       cat("\napplying sobel 5x5 horizontal filter")
       
@@ -254,7 +254,7 @@ fil <- function(rs, filters = c("mean3","mean5","mean7","sd3","sd5","sd7","sbh3"
       names(sbh5) <- "sbh5"
       return(sbh5)
       
-    }else if (item == "sbv5"){
+    } else if (item == "sbv5"){
       
       cat("\napplying sobel 5x5 vertical filter")
       
@@ -262,7 +262,7 @@ fil <- function(rs, filters = c("mean3","mean5","mean7","sd3","sd5","sd7","sbh3"
       names(sbv5) <- "sbv5"
       return(sbv5)
       
-    }else if (item == "laplc5"){
+    } else if (item == "laplc5"){
       
       cat("\napplying laplace filter")
       
@@ -270,7 +270,7 @@ fil <- function(rs, filters = c("mean3","mean5","mean7","sd3","sd5","sd7","sbh3"
       names(laplc5) <- "laplc5"
       return(laplc5)
       
-    }else if (item == "gauss5"){
+    } else if (item == "gauss5"){
       
       cat("\napplying gauss5 filter")
       
@@ -287,3 +287,4 @@ fil <- function(rs, filters = c("mean3","mean5","mean7","sd3","sd5","sd7","sbh3"
     return(raster::stack(filtered))
   }
 }
+####filter scratch####

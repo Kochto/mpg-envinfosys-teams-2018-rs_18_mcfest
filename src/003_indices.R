@@ -17,8 +17,8 @@ source(paste0(root_folder, "/mpg-envinfosys-teams-2018-rs_18_mcfest/src/000_setu
 # plot(indices$mcfestiindex, col = grey.colors(10, start = 0.3, end = 0.9, gamma = 2.2, alpha = NULL))
 
 #RS TOOLBOX BIB - Hauptkomponentenanalyse rasterPCA 
-pcastack <- stack(indices$CIVEindex, indices$BIindex, indices$TGIindex, indices$VVIindex)
-pcamcfest <- RStoolbox::rasterPCA(pcastack)
+# pcastack <- stack(indices$CIVEindex, indices$BIindex, indices$TGIindex, indices$VVIindex)
+# pcamcfest <- RStoolbox::rasterPCA(pcastack)
 # writeRaster(pcamcfest$map$PC1, filename = paste0(envrmt$path_data_aerial_processed, "pcamcfest1.tif"), overwrite=TRUE)
 # writeRaster(pcamcfest$map$PC2, filename = paste0(envrmt$path_data_aerial_processed, "pcamcfest2.tif"), overwrite=TRUE)
 

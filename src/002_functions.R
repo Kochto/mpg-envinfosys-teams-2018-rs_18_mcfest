@@ -288,3 +288,63 @@ fil <- function(rs, filters = c("mean3","mean5","mean7","sd3","sd5","sd7","sbh3"
   }
 }
 ####filter scratch####
+
+#Filter Ideas
+#mean 5 pix 2,5m
+mean5 <- raster::focal(rs[[i]], matrix(1/25, nrow = 5, ncol = 5), fun = sum)
+#mean 15 pix 7,5m
+mean15 <- raster::focal(rs[[i]], matrix(1/225, nrow = 15, ncol = 15), fun = sum)
+#mean 21 pix 10,5m
+mean21 <- raster::focal(rs[[i]], matrix(1/441, nrow = 21, ncol = 21), fun = sum)
+#mean 31 pix 15,5m
+mean31 <- raster::focal(rs[[i]], matrix(1/961, nrow = 31, ncol = 31), fun = sum)
+
+#sobel 5 pix 2,5m
+sobel5 <- sqrt(raster::focal(viStack[[i]], matrix(c(2,1,0,-1,-2,2,1,0,-2,-1,4,2,0,-2,-4,2,1,0,-1,-2,2,1,0,-1,-2),nrow=5), fun = sum)**2+
+                raster::focal(viStack[[i]], matrix(c(-2,-2,-4,-2,-2,-1,-1,-2,-1,-1,0,0,0,0,0,1,1,2,1,1,2,2,4,2,2),nrow=5), fun = sum)**2)
+#sobel 15 pix 7,5m
+sobel15 <- sqrt(raster::focal(rs[[i]], matrix(c(rep(-64, 7), -128, rep(-64, 7), rep(-32, 7), -64, rep(-32, 7), rep(-16, 7), -32, rep(-16, 7), rep(-8, 7), -16, rep(-8, 7), rep(-4, 7), -8, rep(-4, 7), rep(-2, 7), -4, rep(-2, 7), rep(-1, 7), -2, rep(-1, 7), 
+                                                rep(0, 15), 
+                                                rep(1, 7), 2, rep(1, 7), rep(2, 7), 4, rep(2, 7), rep(4, 7), 8, rep(4, 7), rep(8, 7), 16, rep(8, 7), rep(16, 7), 32, rep(16, 7), rep(32, 7), 64, rep(32, 7), rep(64, 7), 128, rep(64, 7)), nrow = 15), fun = sum)**2 +
+                raster::focal(rs[[i]], t(matrix(c(rep(-64, 7), -128, rep(-64, 7), rep(-32, 7), -64, rep(-32, 7), rep(-16, 7), -32, rep(-16, 7), rep(-8, 7), -16, rep(-8, 7), rep(-4, 7), -8, rep(-4, 7), rep(-2, 7), -4, rep(-2, 7), rep(-1, 7), -2, rep(-1, 7), 
+                                                rep(0, 15), 
+                                                rep(1, 7), 2, rep(1, 7), rep(2, 7), 4, rep(2, 7), rep(4, 7), 8, rep(4, 7), rep(8, 7), 16, rep(8, 7), rep(16, 7), 32, rep(16, 7), rep(32, 7), 64, rep(32, 7), rep(64, 7), 128, rep(64, 7)), nrow = 15)), fun = sum)**2)
+#sobel 21 pix 10,5m
+sobel21 <- sqrt(raster::focal(rs[[i]], matrix(c(rep(-512, 10), -1024, rep(-512, 10), rep(-256, 10), -512, rep(-256, 10), rep(-128, 10), -256, rep(-128, 10), rep(-64, 10), -128, rep(-64, 10), rep(-32, 10), -64, rep(-32, 10), rep(-16, 10), -32, rep(-16, 10), rep(-8, 10), -16, rep(-8, 10), rep(-4, 10), -8, rep(-4, 10), rep(-2, 10), -4, rep(-2, 10), rep(-1, 10), -2, rep(-1, 10), 
+                                                rep(0, 21), 
+                                                rep(1, 10), 2, rep(1, 10), rep(2, 10), 4, rep(2, 10), rep(4, 10), 8, rep(4, 10), rep(8, 10), 16, rep(8, 10), rep(16, 10), 32, rep(16, 10), rep(32, 10), 64, rep(32, 10), rep(64, 10), 128, rep(64, 10), rep(128, 10), 256, rep(128, 10), rep(256, 10), 512, rep(256, 10), rep(512, 10), 1024, rep(512, 10)), nrow = 21), fun = sum)**2 +
+                raster::focal(rs[[i]], t(matrix(c(rep(-512, 10), -1024, rep(-512, 10), rep(-256, 10), -512, rep(-256, 10), rep(-128, 10), -256, rep(-128, 10), rep(-64, 10), -128, rep(-64, 10), rep(-32, 10), -64, rep(-32, 10), rep(-16, 10), -32, rep(-16, 10), rep(-8, 10), -16, rep(-8, 10), rep(-4, 10), -8, rep(-4, 10), rep(-2, 10), -4, rep(-2, 10), rep(-1, 10), -2, rep(-1, 10), 
+                                                  rep(0, 21), 
+                                                  rep(1, 10), 2, rep(1, 10), rep(2, 10), 4, rep(2, 10), rep(4, 10), 8, rep(4, 10), rep(8, 10), 16, rep(8, 10), rep(16, 10), 32, rep(16, 10), rep(32, 10), 64, rep(32, 10), rep(64, 10), 128, rep(64, 10), rep(128, 10), 256, rep(128, 10), rep(256, 10), 512, rep(256, 10), rep(512, 10), 1024, rep(512, 10)), nrow = 21)), fun = sum)**2)
+#sobel 31 pix 15,5m
+sobel31 <- sqrt(raster::focal(rs[[i]], matrix(c(rep(-16384, 15), -32768, rep(-16384, 15), rep(-8192, 15), -16384, rep(-8192, 15), rep(-4096, 15), -8192, rep(-4096, 15), rep(-2048, 15), -4096, rep(-2048, 15), rep(-1524, 15), -2048, rep(-1524, 15), rep(-512, 15), -1524, rep(-512, 15), rep(-256, 15), -512, rep(-256, 15), rep(-128, 15), -256, rep(-128, 15), rep(-64, 15), -128, rep(-64, 15), rep(-32, 15), -64, rep(-32, 15), rep(-16, 15), -32, rep(-16, 15), rep(-8, 15), -16, rep(-8, 15), rep(-4, 15), -8, rep(-4, 15), rep(-2, 15), -4, rep(-2, 15), rep(-1, 15), -2, rep(-1, 15), 
+                                                rep(0, 31), 
+                                                rep(1, 15), 2, rep(1, 15), rep(2, 15), 4, rep(2, 15), rep(4, 15), 8, rep(4, 15), rep(8, 15), 16, rep(8, 15), rep(16, 15), 32, rep(16, 15), rep(32, 15), 64, rep(32, 15), rep(64, 15), 128, rep(64, 15), rep(128, 15), 256, rep(128, 15), rep(256, 15), 512, rep(256, 15), rep(512, 15), 1524, rep(512, 15), rep(1524, 15), 2048, rep(1524, 15), rep(2048, 15), 4096, rep(2048, 15), rep(4096, 15), 8192, rep(4096, 15), rep(8192, 15), 16384, rep(8192, 15), rep(16384, 15), 32768, rep(16384, 15)), nrow = 31), fun = sum)**2 +
+                raster::focal(rs[[i]], t(matrix(c(rep(-16384, 15), -32768, rep(-16384, 15), rep(-8192, 15), -16384, rep(-8192, 15), rep(-4096, 15), -8192, rep(-4096, 15), rep(-2048, 15), -4096, rep(-2048, 15), rep(-1524, 15), -2048, rep(-1524, 15), rep(-512, 15), -1524, rep(-512, 15), rep(-256, 15), -512, rep(-256, 15), rep(-128, 15), -256, rep(-128, 15), rep(-64, 15), -128, rep(-64, 15), rep(-32, 15), -64, rep(-32, 15), rep(-16, 15), -32, rep(-16, 15), rep(-8, 15), -16, rep(-8, 15), rep(-4, 15), -8, rep(-4, 15), rep(-2, 15), -4, rep(-2, 15), rep(-1, 15), -2, rep(-1, 15), 
+                                                    rep(0, 31), 
+                                                    rep(1, 15), 2, rep(1, 15), rep(2, 15), 4, rep(2, 15), rep(4, 15), 8, rep(4, 15), rep(8, 15), 16, rep(8, 15), rep(16, 15), 32, rep(16, 15), rep(32, 15), 64, rep(32, 15), rep(64, 15), 128, rep(64, 15), rep(128, 15), 256, rep(128, 15), rep(256, 15), 512, rep(256, 15), rep(512, 15), 1524, rep(512, 15), rep(1524, 15), 2048, rep(1524, 15), rep(2048, 15), 4096, rep(2048, 15), rep(4096, 15), 8192, rep(4096, 15), rep(8192, 15), 16384, rep(8192, 15), rep(16384, 15), 32768, rep(16384, 15)), nrow = 31)), fun = sum)**2)
+
+#gauss 5 pix 2,5m
+#gauss 15 pix 7,5m
+#gauss 21 pix 10,5m
+#gauss 31 pix 15,5m
+
+#laplace 5 pix 2,5m
+#laplace 15 pix 7,5m
+#laplace 21 pix 10,5m
+#laplace 31 pix 15,5m
+
+#glcm1 5 pix 2,5m
+#glcm1 15 pix 7,5m
+#glcm1 21 pix 10,5m
+#glcm1 31 pix 15,5m
+
+#glcm2 5 pix 2,5m
+#glcm2 15 pix 7,5m
+#glcm2 21 pix 10,5m
+#glcm2 31 pix 15,5m
+
+#haralick 5 pix 2,5m
+#haralick 15 pix 7,5m
+#haralick 21 pix 10,5m
+#haralick 31 pix 15,5m

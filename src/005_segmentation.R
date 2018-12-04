@@ -7,7 +7,7 @@ giLinks <- list()
 giLinks$saga<-link2GI::linkSAGA()
 giLinks$otb<-link2GI::linkOTB()
 giLinks$grass<-link2GI::linkGRASS7(returnPath = TRUE)
-  
+ 
 #To visually test the accuracy of the applied treepos and chmseg algorithms.
 #Testing is done in three scenarios leaf, leaf_boreal, boreal.
 
@@ -52,25 +52,21 @@ writeOGR(crlaubGWS, paste0(envrmt$path_data_lidar_segtest_laubtest, "crlaubGWS.s
 writeOGR(crlaubRL, paste0(envrmt$path_data_lidar_segtest_laubtest, "crlaubRL.shp"), "crlaubRL", driver= "ESRI Shapefile")
 
 #Nadel Laub Test====================================================================
-#Laub Nadel Mix
-nadellaub <- raster::raster(paste0(envrmt$path_data_lidar_segtest, "nadel_laub_test.tif"))
+#Laub Nadel Mix #### Nclust, Orpheo Toolbox, rgeos
+nadellaub <- raster::raster(paste0(envrmt$path_data_lidar_segtest, "testalle.tif"))
+nadellaub <- raster::focal(nadellaub, matrix(1/25, nrow = 5, ncol = 5), fun = sum)
 
 #To test if 3 by 3 focal mean has an impact see master thesis finn
-kx = matrix(c(-1,-2,-1,0,0,0,1,2,1), ncol=3)
-ky = matrix(c(1,0,-1,2,0,-2,1,0,-1), ncol=3)
-k = (kx**2 + ky**2)**0.5
-nadellaub <- raster::focal(nadellaub, w=k)
 
+lin <- function(x){x * 0.06 + 0.5}
 
-lin <- function(x){x * 0.05 + 0.6}
-
-nadellaubFT <- uavRst::treepos_FT(chm=nadellaub ,minTreeAlt = 2, maxCrownArea = 75, winFun = lin)
+nadellaubFT <- uavRst::treepos_FT(chm=nadellaub, minTreeAlt = 10, maxCrownArea = 15, winFun = lin)
 
 #Parameter to play around with
 path_run <- envrmt$path_run
 path_tmp <- envrmt$path_data_tmp
-nadellaubGWS <- uavRst::treepos_GWS(chm=nadellaub, minTreeAlt = 7, minCrownArea = 3, maxCrownArea = 150, 
-                               join = 1, thresh = 0.35, split = TRUE, 
+nadellaubGWS <- uavRst::treepos_GWS(chm=nadellaub, minTreeAlt = 7, minCrownArea = 3, maxCrownArea = 200, 
+                               join = 1, thresh = 0.5, split = TRUE, 
                                cores = 2, giLinks = giLinks)
 
 nadellaubLIDR <- uavRst::treepos_lidR(chm = nadellaub, movingWin = 3, minTreeAlt = 2)
@@ -78,24 +74,27 @@ nadellaubLIDR <- uavRst::treepos_lidR(chm = nadellaub, movingWin = 3, minTreeAlt
 nadellaubRL <- uavRst::treepos_RL(chm=nadellaub, movingWin = 3, minTreeAlt = 2)
 
 #Crowns für gesamtes Bild in Tiles rechnen, mit hoher überlappung
-crnadellaubFT <- uavRst::chmseg_FT(treepos = nadellaubFT, chm = nadellaub, minTreeAlt = 2, format = "polygons")
+crnadellaubFT <- uavRst::chmseg_FT(treepos = test, chm = nadellaub, minTreeAlt = 10, format = "polygons")
 
-crnadellaubITC <- uavRst::chmseg_ITC(chm = nadellaub, EPSG = 25832, minTreeAlt = 5, maxCrownArea = 150)
+#test <- ForestTools::vwf(nadellaub, winFun = function(x){x * 0.06 + 0.5}, minHeight = 2)
+
+
+crnadellaubITC <- uavRst::chmseg_ITC(chm = nadellaub, EPSG = 25832, minTreeAlt = 5, maxCrownArea = 120, movingWin = 5)
 
 #Parameter to play around with
 crnadellaubGWS <- uavRst::chmseg_GWS(chm = nadellaub , treepos = nadellaubGWS, minTreeAlt = 7,
                                 neighbour = 0,
-                                thVarFeature = 1.,
-                                thVarSpatial = 1.,
-                                thSimilarity = 0.00001,
+                                thVarFeature = 1,
+                                thVarSpatial = 1,
+                                thSimilarity = 0.001,
                                 giLinks = giLinks)
 
 crnadellaubRL <- uavRst::chmseg_RL(treepos = nadellaubRL, chm = nadellaub, maxCrownArea = 150, exclusion = 0)
 
 
-writeOGR(crnadellaubFT, paste0(envrmt$path_data_lidar_segtest_nadel_laub_test, "crnadellaubFTfunar.shp"), "crnadellaubFTfunar", driver="ESRI Shapefile")
-writeOGR(crnadellaubITC, paste0(envrmt$path_data_lidar_segtest_nadel_laub_test, "crnadellaubITC.shp"), "crnadellaubITC", driver="ESRI Shapefile")
-writeOGR(crnadellaubGWS, paste0(envrmt$path_data_lidar_segtest_nadel_laub_test, "crnadellaubGWS.shp"), "crnadellaubGWS", driver= "ESRI Shapefile")
+writeOGR(crnadellaubFT, paste0(envrmt$path_data_lidar_segtest_nadel_laub_test, "crnadellaubFTfunar.shp"), "crnadellaubFTfunar", driver="ESRI Shapefile", overwrite_layer = TRUE)
+writeOGR(crnadellaubITC, paste0(envrmt$path_data_lidar_segtest_nadel_laub_test, "crnadellaubITC.shp"), "crnadellaubITC", driver="ESRI Shapefile", overwrite_layer = TRUE)
+writeOGR(crnadellaubGWS, paste0(envrmt$path_data_lidar_segtest_nadel_laub_test, "crnadellaubGWS.shp"), "crnadellaubGWS", driver= "ESRI Shapefile", overwrite_layer = TRUE)
 writeOGR(crnadellaubRL, paste0(envrmt$path_data_lidar_segtest_nadel_laub_test, "crnadellaubRL.shp"), "crnadellaubRL", driver= "ESRI Shapefile")
 
 #Nadeltest====================================================================

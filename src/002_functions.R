@@ -323,16 +323,35 @@ rgbIndices<- function(rgb,
 #                 raster::focal(rs[[i]], t(matrix(c(rep(-16384, 15), -32768, rep(-16384, 15), rep(-8192, 15), -16384, rep(-8192, 15), rep(-4096, 15), -8192, rep(-4096, 15), rep(-2048, 15), -4096, rep(-2048, 15), rep(-1524, 15), -2048, rep(-1524, 15), rep(-512, 15), -1524, rep(-512, 15), rep(-256, 15), -512, rep(-256, 15), rep(-128, 15), -256, rep(-128, 15), rep(-64, 15), -128, rep(-64, 15), rep(-32, 15), -64, rep(-32, 15), rep(-16, 15), -32, rep(-16, 15), rep(-8, 15), -16, rep(-8, 15), rep(-4, 15), -8, rep(-4, 15), rep(-2, 15), -4, rep(-2, 15), rep(-1, 15), -2, rep(-1, 15), 
 #                                                     rep(0, 31), 
 #                                                     rep(1, 15), 2, rep(1, 15), rep(2, 15), 4, rep(2, 15), rep(4, 15), 8, rep(4, 15), rep(8, 15), 16, rep(8, 15), rep(16, 15), 32, rep(16, 15), rep(32, 15), 64, rep(32, 15), rep(64, 15), 128, rep(64, 15), rep(128, 15), 256, rep(128, 15), rep(256, 15), 512, rep(256, 15), rep(512, 15), 1524, rep(512, 15), rep(1524, 15), 2048, rep(1524, 15), rep(2048, 15), 4096, rep(2048, 15), rep(4096, 15), 8192, rep(4096, 15), rep(8192, 15), 16384, rep(8192, 15), rep(16384, 15), 32768, rep(16384, 15)), nrow = 31)), fun = sum)**2)
-
-#gauss 5 pix 2,5m
-#gauss 15 pix 7,5m
-#gauss 21 pix 10,5m
-#gauss 31 pix 15,5m
-
-#laplace 5 pix 2,5m
-#laplace 15 pix 7,5m
-#laplace 21 pix 10,5m
-#laplace 31 pix 15,5m
+# #gauss 5 pix 2,5m
+# gauss5 <- raster::focal(rs[[i]],  matrix(c(1,1,2,1,1,1,2,4,2,1,2,4,8,4,2,1,2,4,2,1,1,1,2,1,1),nrow=5), fun = sum)
+# 
+# #gauss 15 pix 7,5m
+# 
+# gauss15 <- raster::focal(rs[[i]], w=smoothie::kernel2dmeitsjer(type = "gauss",nx=15,ny=15,sigma=1),fun = sum)
+# 
+# #gauss 21 pix 10,5m
+# gauss21 <- raster::focal(rs[[i]], w=smoothie::kernel2dmeitsjer(type = "gauss",nx=21,ny=21,sigma=1),fun = sum)
+# 
+# 
+# #gauss 31 pix 15,5m
+# gauss31 <- raster::focal(rs[[i]], w=smoothie::kernel2dmeitsjer(type = "gauss",nx=31,ny=31,sigma=1),fun = sum)
+# 
+# 
+# 
+# 
+# #laplacian of gaussian 5 pix 2,5m
+# LoG5 <- raster::focal(rs[[i]], w=smoothie::kernel2dmeitsjer(type = "LoG", nx=5,ny=5,sigma=1),fun = sum)
+# 
+# 
+# #laplacian of gaussian 15 pix 7,5m
+# LoG15 <- raster::focal(rs[[i]], w=smoothie::kernel2dmeitsjer(type = "LoG", nx=15,ny=15,sigma=1),fun = sum)
+# 
+# #laplacian of gaussian 21 pix 10,5m
+# LoG21 <- raster::focal(rs[[i]], w=smoothie::kernel2dmeitsjer(type = "LoG", nx=21,ny=21,sigma=1),fun = sum)
+# 
+# #laplacian of gaussian 31 pix 15,5m
+# LoG31 <- raster::focal(rs[[i]], w=smoothie::kernel2dmeitsjer(type = "LoG", nx=31,ny=31,sigma=1),fun = sum)
 
 #glcm1 5 pix 2,5m
 #glcm1 15 pix 7,5m

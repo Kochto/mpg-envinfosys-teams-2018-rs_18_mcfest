@@ -2,14 +2,14 @@ root_folder <- envimaR::alternativeEnvi(root_folder = "~/edu/mpg-envinsys-plygrn
                                  alt_env_value = "PCRZP", alt_env_root_folder = "F:\\edu\\mpg-envinsys-plygrnd")
 
 #Set librarys
-libs = c("lidR", "link2GI", "mapview", "raster", "rgdal", "rlas", "sp", "RStoolbox", "glcm")
+libs = c("lidR", "link2GI", "mapview", "raster", "rgdal", "rlas", "sp", "RStoolbox", "glcm", "smoothie")
 lapply(libs, require, character.only = TRUE)
 
 # Set project specific subfolders
 project_folders = c("data/",                                 # data folders
                     "data/aerial/org/", "data/lidar/org/", "data/lidar/segtest/", "data/lidar/segtest/laubtest/", "data/lidar/segtest/nadeltest/",
                     "data/lidar/segtest/nadel_laub_test/", "data/grass/", 
-                    "data/mof/", "data/tmp/", "data/aerial_processed/",
+                    "data/mof/", "data/tmp/", "data/aerial_processed/", "data/validation",
                     "run/", "log/", "data/lidar/",                  # bins and logging
                     "mpg-envinfosys-teams-2018-rs_18_mcfest/src/",   # source code
                     "mpg-envinfosys-teams-2018-rs_18_mcfest/doc/")   # markdown etc. 

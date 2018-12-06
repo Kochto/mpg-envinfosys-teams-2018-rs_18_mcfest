@@ -16,19 +16,27 @@ giLinks$grass<-link2GI::linkGRASS7(returnPath = TRUE)
 #To test if 3 by 3 focal mean has an impact see master thesis finn
 chm <- raster::raster(paste0(envrmt$path_data_lidar, "canopy.tif"))
 chm <- raster::focal(chm, matrix(1/9, nrow = 3, ncol = 3), fun = sum)
-test <- TileManager::TileScheme(chm, dimByCell = c(1000, 1000), buffer = 200, bufferspill = FALSE)
 
-test <- meteo::tiling(chm,tilesize=1000,overlapping=200, aspoints= FALSE, asfiles=TRUE, tiles_folder = paste0(envrmt$path_data), tilename="tile", format="GTiff", 
-               parallel.processing = TRUE, cpus=4)
+tiles<- TileManager::TileScheme(chm, dimByCell = c(1000, 1000), buffer = 150, bufferspill = FALSE)
+treepos <- ForestTools::vwf(nadellaub, winFun = function(x){x * 0.06 + 0.6}, minHeight = 12, minWinNeib = "queen", verbose = TRUE, maxWinDiameter = 30)
 
-plot(chm)
-plot(test, add=TRUE)
+splitseg <- lapply(seq(2), function (i){
+  tmp <- crop(chm,tiles$buffPolygons[i,])
+  crowns <- uavRst::chmseg_FT(treeposFT,tmp,minTreeAlt = 12,format= "polygons", verbose =TRUE)
+  crs(crowns) <- crs(chm)
+  ids <- na.omit(over(treeposFT,crowns))
+  ids$rownames <- as.numeric(row.names(ids))
+  crowns@data$treeID <- ids$rownames
+  crowns <- crop(splitseg[[i]],tiles$tilePolygons[i,])
+  return(crowns)})
 
 
-ttops_all <- ForestTools::vwf(chm, winFun = function(x){x * 0.06 + 0.6}, minHeight = 12, minWinNeib = "queen", verbose = TRUE, maxWinDiameter = 30)
-crft_all <- ForestTools::mcws(treetops = ttops_all, CHM = chm, minHeight = 12, format = "polygons", verbose = TRUE)
-crft_all <- uavRst::chmseg_FT(treepos = ttops_all, chm = chm, minTreeAlt = 12, format = "polygons", verbose = TRUE)
+#writeOGR(splitseg[[2]], dsn = "D:/ben/goergen/sseg.shp", driver = "ESRI Shapefile", layer ="sseg", overwrite_layer = TRUE)
 
+
+cseg <- rbind(splitseg[[1]],splitseg[[2]])
+cseg <- aggregate(cseg,by = "treeID")
+#writeOGR(cseg, dsn = "D:/ben/goergen/merge.shp", driver = "ESRI Shapefile", layer ="merge", overwrite_layer = TRUE)
 
 
 

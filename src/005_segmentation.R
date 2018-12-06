@@ -14,6 +14,24 @@ giLinks$grass<-link2GI::linkGRASS7(returnPath = TRUE)
 #Nadel Laub Test====================================================================
 #Laub Nadel Mix #### Nclust, Orpheo Toolbox, rgeos
 #To test if 3 by 3 focal mean has an impact see master thesis finn
+chm <- raster::raster(paste0(envrmt$path_data_lidar, "canopy.tif"))
+chm <- raster::focal(chm, matrix(1/9, nrow = 3, ncol = 3), fun = sum)
+test <- TileManager::TileScheme(chm, dimByCell = c(1000, 1000), buffer = 200, bufferspill = FALSE)
+
+test <- meteo::tiling(chm,tilesize=1000,overlapping=200, aspoints= FALSE, asfiles=TRUE, tiles_folder = paste0(envrmt$path_data), tilename="tile", format="GTiff", 
+               parallel.processing = TRUE, cpus=4)
+
+plot(chm)
+plot(test, add=TRUE)
+
+
+ttops_all <- ForestTools::vwf(chm, winFun = function(x){x * 0.06 + 0.6}, minHeight = 12, minWinNeib = "queen", verbose = TRUE, maxWinDiameter = 30)
+crft_all <- ForestTools::mcws(treetops = ttops_all, CHM = chm, minHeight = 12, format = "polygons", verbose = TRUE)
+crft_all <- uavRst::chmseg_FT(treepos = ttops_all, chm = chm, minTreeAlt = 12, format = "polygons", verbose = TRUE)
+
+
+
+
 nadellaub <- raster::raster(paste0(envrmt$path_data_lidar_segtest, "testalle.tif"))
 nadellaub <- raster::focal(nadellaub, matrix(1/9, nrow = 3, ncol = 3), fun = sum)
 writeRaster(nadellaub, paste0(envrmt$path_data_lidar_segtest_nadel_laub_test, "meannadellaub.tif"), overwrite = TRUE)
@@ -22,13 +40,13 @@ writeRaster(nadellaub, paste0(envrmt$path_data_lidar_segtest_nadel_laub_test, "m
 #ForestTools
 #lin <- function(x){x * 0.06 + 0.5}
 #nadellaubFT <- uavRst::treepos_FT(chm=nadellaub, minTreeAlt = 12, maxCrownArea = 15, winFun = lin)
-test <- ForestTools::vwf(nadellaub, winFun = function(x){x * 0.07 + 0.6}, minHeight = 12, minWinNeib = "queen", verbose = TRUE, maxWinDiameter = 30)
+test <- ForestTools::vwf(nadellaub, winFun = function(x){x * 0.06 + 0.6}, minHeight = 12, minWinNeib = "queen", verbose = TRUE, maxWinDiameter = 30)
 crnadellaubFT <- uavRst::chmseg_FT(treepos = test, chm = nadellaub, minTreeAlt = 12, format = "polygons", verbose = TRUE)
 writeOGR(crnadellaubFT, paste0(envrmt$path_data_lidar_segtest_nadel_laub_test, "crnadellaubFT_mean.shp"), "crnadellaubFTmean", driver="ESRI Shapefile", overwrite_layer = TRUE)
 
 #ITC
 crnadellaubITC <- uavRst::chmseg_ITC(chm = nadellaub, EPSG = 25832, minTreeAlt = 12, maxCrownArea = 150, movingWin = 7)
-writeOGR(crnadellaubITC, paste0(envrmt$path_data_lidar_segtest_nadel_laub_test, "crnadellaubITC_150.shp"), "crnadellaubITC150", driver="ESRI Shapefile", overwrite_layer = TRUE)
+writeOGR(crnadellaubITC, paste0(envrmt$path_data_lidar_segtest_nadel_laub_test, "crnadellaubITC_nomean.shp"), "crnadellaubITCnomean", driver="ESRI Shapefile", overwrite_layer = TRUE)
 
 #Parameter to play around with
 #GWS

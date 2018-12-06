@@ -2,7 +2,7 @@
 #@https://github.com/environmentalinformatics-marburg/satelliteTools/blob/master/R/rgbIndices.R
 
 rgbIndices<- function(rgb,
-                      rgbi=c("VVI","VARI","NDTI","RI","CI","BI","SI","HI","TGI","GLI","NGRDI")) {
+                      rgbi=c("VVI","VARI","NDTI","RI","CI","BI","SI","HI","TGI","GLI","NGRDI", "ExGR", "VEG")) {
   
   ## compatibility check
   if (raster::nlayers(rgb) < 3)
@@ -289,74 +289,151 @@ rgbIndices<- function(rgb,
 # }
 ####filter scratch####
 
-#Filter Ideas
-#mean 5 pix 2,5m
-# mean5 <- raster::focal(rs[[i]], matrix(1/25, nrow = 5, ncol = 5), fun = sum)
-# #mean 15 pix 7,5m
-# mean15 <- raster::focal(rs[[i]], matrix(1/225, nrow = 15, ncol = 15), fun = sum)
-# #mean 21 pix 10,5m
-# mean21 <- raster::focal(rs[[i]], matrix(1/441, nrow = 21, ncol = 21), fun = sum)
-# #mean 31 pix 15,5m
-# mean31 <- raster::focal(rs[[i]], matrix(1/961, nrow = 31, ncol = 31), fun = sum)
-# 
-# #sobel 5 pix 2,5m
-# sobel5 <- sqrt(raster::focal(viStack[[i]], matrix(c(2,1,0,-1,-2,2,1,0,-2,-1,4,2,0,-2,-4,2,1,0,-1,-2,2,1,0,-1,-2),nrow=5), fun = sum)**2+
-#                 raster::focal(viStack[[i]], matrix(c(-2,-2,-4,-2,-2,-1,-1,-2,-1,-1,0,0,0,0,0,1,1,2,1,1,2,2,4,2,2),nrow=5), fun = sum)**2)
-# #sobel 15 pix 7,5m
-# sobel15 <- sqrt(raster::focal(rs[[i]], matrix(c(rep(-64, 7), -128, rep(-64, 7), rep(-32, 7), -64, rep(-32, 7), rep(-16, 7), -32, rep(-16, 7), rep(-8, 7), -16, rep(-8, 7), rep(-4, 7), -8, rep(-4, 7), rep(-2, 7), -4, rep(-2, 7), rep(-1, 7), -2, rep(-1, 7), 
-#                                                 rep(0, 15), 
-#                                                 rep(1, 7), 2, rep(1, 7), rep(2, 7), 4, rep(2, 7), rep(4, 7), 8, rep(4, 7), rep(8, 7), 16, rep(8, 7), rep(16, 7), 32, rep(16, 7), rep(32, 7), 64, rep(32, 7), rep(64, 7), 128, rep(64, 7)), nrow = 15), fun = sum)**2 +
-#                 raster::focal(rs[[i]], t(matrix(c(rep(-64, 7), -128, rep(-64, 7), rep(-32, 7), -64, rep(-32, 7), rep(-16, 7), -32, rep(-16, 7), rep(-8, 7), -16, rep(-8, 7), rep(-4, 7), -8, rep(-4, 7), rep(-2, 7), -4, rep(-2, 7), rep(-1, 7), -2, rep(-1, 7), 
-#                                                 rep(0, 15), 
-#                                                 rep(1, 7), 2, rep(1, 7), rep(2, 7), 4, rep(2, 7), rep(4, 7), 8, rep(4, 7), rep(8, 7), 16, rep(8, 7), rep(16, 7), 32, rep(16, 7), rep(32, 7), 64, rep(32, 7), rep(64, 7), 128, rep(64, 7)), nrow = 15)), fun = sum)**2)
-# #sobel 21 pix 10,5m
-# sobel21 <- sqrt(raster::focal(rs[[i]], matrix(c(rep(-512, 10), -1024, rep(-512, 10), rep(-256, 10), -512, rep(-256, 10), rep(-128, 10), -256, rep(-128, 10), rep(-64, 10), -128, rep(-64, 10), rep(-32, 10), -64, rep(-32, 10), rep(-16, 10), -32, rep(-16, 10), rep(-8, 10), -16, rep(-8, 10), rep(-4, 10), -8, rep(-4, 10), rep(-2, 10), -4, rep(-2, 10), rep(-1, 10), -2, rep(-1, 10), 
-#                                                 rep(0, 21), 
-#                                                 rep(1, 10), 2, rep(1, 10), rep(2, 10), 4, rep(2, 10), rep(4, 10), 8, rep(4, 10), rep(8, 10), 16, rep(8, 10), rep(16, 10), 32, rep(16, 10), rep(32, 10), 64, rep(32, 10), rep(64, 10), 128, rep(64, 10), rep(128, 10), 256, rep(128, 10), rep(256, 10), 512, rep(256, 10), rep(512, 10), 1024, rep(512, 10)), nrow = 21), fun = sum)**2 +
-#                 raster::focal(rs[[i]], t(matrix(c(rep(-512, 10), -1024, rep(-512, 10), rep(-256, 10), -512, rep(-256, 10), rep(-128, 10), -256, rep(-128, 10), rep(-64, 10), -128, rep(-64, 10), rep(-32, 10), -64, rep(-32, 10), rep(-16, 10), -32, rep(-16, 10), rep(-8, 10), -16, rep(-8, 10), rep(-4, 10), -8, rep(-4, 10), rep(-2, 10), -4, rep(-2, 10), rep(-1, 10), -2, rep(-1, 10), 
-#                                                   rep(0, 21), 
-#                                                   rep(1, 10), 2, rep(1, 10), rep(2, 10), 4, rep(2, 10), rep(4, 10), 8, rep(4, 10), rep(8, 10), 16, rep(8, 10), rep(16, 10), 32, rep(16, 10), rep(32, 10), 64, rep(32, 10), rep(64, 10), 128, rep(64, 10), rep(128, 10), 256, rep(128, 10), rep(256, 10), 512, rep(256, 10), rep(512, 10), 1024, rep(512, 10)), nrow = 21)), fun = sum)**2)
-# #sobel 31 pix 15,5m
-# sobel31 <- sqrt(raster::focal(rs[[i]], matrix(c(rep(-16384, 15), -32768, rep(-16384, 15), rep(-8192, 15), -16384, rep(-8192, 15), rep(-4096, 15), -8192, rep(-4096, 15), rep(-2048, 15), -4096, rep(-2048, 15), rep(-1524, 15), -2048, rep(-1524, 15), rep(-512, 15), -1524, rep(-512, 15), rep(-256, 15), -512, rep(-256, 15), rep(-128, 15), -256, rep(-128, 15), rep(-64, 15), -128, rep(-64, 15), rep(-32, 15), -64, rep(-32, 15), rep(-16, 15), -32, rep(-16, 15), rep(-8, 15), -16, rep(-8, 15), rep(-4, 15), -8, rep(-4, 15), rep(-2, 15), -4, rep(-2, 15), rep(-1, 15), -2, rep(-1, 15), 
-#                                                 rep(0, 31), 
-#                                                 rep(1, 15), 2, rep(1, 15), rep(2, 15), 4, rep(2, 15), rep(4, 15), 8, rep(4, 15), rep(8, 15), 16, rep(8, 15), rep(16, 15), 32, rep(16, 15), rep(32, 15), 64, rep(32, 15), rep(64, 15), 128, rep(64, 15), rep(128, 15), 256, rep(128, 15), rep(256, 15), 512, rep(256, 15), rep(512, 15), 1524, rep(512, 15), rep(1524, 15), 2048, rep(1524, 15), rep(2048, 15), 4096, rep(2048, 15), rep(4096, 15), 8192, rep(4096, 15), rep(8192, 15), 16384, rep(8192, 15), rep(16384, 15), 32768, rep(16384, 15)), nrow = 31), fun = sum)**2 +
-#                 raster::focal(rs[[i]], t(matrix(c(rep(-16384, 15), -32768, rep(-16384, 15), rep(-8192, 15), -16384, rep(-8192, 15), rep(-4096, 15), -8192, rep(-4096, 15), rep(-2048, 15), -4096, rep(-2048, 15), rep(-1524, 15), -2048, rep(-1524, 15), rep(-512, 15), -1524, rep(-512, 15), rep(-256, 15), -512, rep(-256, 15), rep(-128, 15), -256, rep(-128, 15), rep(-64, 15), -128, rep(-64, 15), rep(-32, 15), -64, rep(-32, 15), rep(-16, 15), -32, rep(-16, 15), rep(-8, 15), -16, rep(-8, 15), rep(-4, 15), -8, rep(-4, 15), rep(-2, 15), -4, rep(-2, 15), rep(-1, 15), -2, rep(-1, 15), 
-#                                                     rep(0, 31), 
-#                                                     rep(1, 15), 2, rep(1, 15), rep(2, 15), 4, rep(2, 15), rep(4, 15), 8, rep(4, 15), rep(8, 15), 16, rep(8, 15), rep(16, 15), 32, rep(16, 15), rep(32, 15), 64, rep(32, 15), rep(64, 15), 128, rep(64, 15), rep(128, 15), 256, rep(128, 15), rep(256, 15), 512, rep(256, 15), rep(512, 15), 1524, rep(512, 15), rep(1524, 15), 2048, rep(1524, 15), rep(2048, 15), 4096, rep(2048, 15), rep(4096, 15), 8192, rep(4096, 15), rep(8192, 15), 16384, rep(8192, 15), rep(16384, 15), 32768, rep(16384, 15)), nrow = 31)), fun = sum)**2)
-# #gauss 5 pix 2,5m
-# gauss5 <- raster::focal(rs[[i]],  matrix(c(1,1,2,1,1,1,2,4,2,1,2,4,8,4,2,1,2,4,2,1,1,1,2,1,1),nrow=5), fun = sum)
-# 
-# #gauss 15 pix 7,5m
-# 
-# gauss15 <- raster::focal(rs[[i]], w=smoothie::kernel2dmeitsjer(type = "gauss",nx=15,ny=15,sigma=1),fun = sum)
-# 
-# #gauss 21 pix 10,5m
-# gauss21 <- raster::focal(rs[[i]], w=smoothie::kernel2dmeitsjer(type = "gauss",nx=21,ny=21,sigma=1),fun = sum)
-# 
-# 
-# #gauss 31 pix 15,5m
-# gauss31 <- raster::focal(rs[[i]], w=smoothie::kernel2dmeitsjer(type = "gauss",nx=31,ny=31,sigma=1),fun = sum)
-# 
-# 
-# 
-# 
-# #laplacian of gaussian 5 pix 2,5m
-# LoG5 <- raster::focal(rs[[i]], w=smoothie::kernel2dmeitsjer(type = "LoG", nx=5,ny=5,sigma=1),fun = sum)
-# 
-# 
-# #laplacian of gaussian 15 pix 7,5m
-# LoG15 <- raster::focal(rs[[i]], w=smoothie::kernel2dmeitsjer(type = "LoG", nx=15,ny=15,sigma=1),fun = sum)
-# 
-# #laplacian of gaussian 21 pix 10,5m
-# LoG21 <- raster::focal(rs[[i]], w=smoothie::kernel2dmeitsjer(type = "LoG", nx=21,ny=21,sigma=1),fun = sum)
-# 
-# #laplacian of gaussian 31 pix 15,5m
-# LoG31 <- raster::focal(rs[[i]], w=smoothie::kernel2dmeitsjer(type = "LoG", nx=31,ny=31,sigma=1),fun = sum)
+filter <- function(rs, fil=c("mean5", "mean15", "mean21", "mean31", "sobel5", "sobel15", "sobel21", "sobel31", 
+                                "gauss5", "gauss15", "gauss21", "gauss31", "LoG5", "LoG15", "LoG21", "LoG31")){
 
-#glcm1 5 pix 2,5m
-#glcm1 15 pix 7,5m
-#glcm1 21 pix 10,5m
-#glcm1 31 pix 15,5m
+  prog <- lapply(fil, function(t){
+    
+    if (t=="mean5"){
+      #mean 5 pix 2,5m
+      cat("\ncalc mean5")
+      mean5 <- raster::focal(rs, matrix(1/25, nrow = 5, ncol = 5), fun = sum)
+      names(mean5) <- "mean5"
+      return(mean5)
+    }
+    else if (t=="mean15"){
+      #mean 15 pix 7,5m
+      cat("\ncalc mean15")
+      mean15 <- raster::focal(rs, matrix(1/225, nrow = 15, ncol = 15), fun = sum)
+      names(mean15) <- "mean15"
+      return(mean15)
+    }
+    else if (t=="mean21"){
+      #mean 21 pix 10,5m
+      cat("\ncalc mean21")
+      mean21 <- raster::focal(rs, matrix(1/441, nrow = 21, ncol = 21), fun = sum)
+      names(mean21) <- "mean21"
+      return(mean21)
+    }
+    else if (t=="mean31"){
+      #mean 31 pix 15,5m
+      cat("\ncalc mean31")
+      mean31 <- raster::focal(rs, matrix(1/961, nrow = 31, ncol = 31), fun = sum)
+      names(mean31) <- "mean31"
+      return(mean31)
+    }
+    else if (t=="sobel5"){
+      #sobel 5 pix 2,5m
+      cat("\ncalc sobel5")
+      sobel5 <- sqrt(raster::focal(rs, matrix(c(2,1,0,-1,-2,2,1,0,-2,-1,4,2,0,-2,-4,2,1,0,-1,-2,2,1,0,-1,-2),nrow=5), fun = sum)**2+
+                       raster::focal(rs, matrix(c(-2,-2,-4,-2,-2,-1,-1,-2,-1,-1,0,0,0,0,0,1,1,2,1,1,2,2,4,2,2),nrow=5), fun = sum)**2)
+      names(sobel5) <- "sobel5"
+      return(sobel5)
+    }
+    else if (t=="sobel15"){
+      #sobel 15 pix 7,5m
+      cat("\ncalc sobel5")
+      sobel15 <- sqrt(raster::focal(rs, matrix(c(rep(-64, 7), -128, rep(-64, 7), rep(-32, 7), -64, rep(-32, 7), rep(-16, 7), -32, rep(-16, 7), rep(-8, 7), -16, rep(-8, 7), rep(-4, 7), -8, rep(-4, 7), rep(-2, 7), -4, rep(-2, 7), rep(-1, 7), -2, rep(-1, 7),
+                                                      rep(0, 15),
+                                                      rep(1, 7), 2, rep(1, 7), rep(2, 7), 4, rep(2, 7), rep(4, 7), 8, rep(4, 7), rep(8, 7), 16, rep(8, 7), rep(16, 7), 32, rep(16, 7), rep(32, 7), 64, rep(32, 7), rep(64, 7), 128, rep(64, 7)), nrow = 15), fun = sum)**2 +
+                        raster::focal(rs, t(matrix(c(rep(-64, 7), -128, rep(-64, 7), rep(-32, 7), -64, rep(-32, 7), rep(-16, 7), -32, rep(-16, 7), rep(-8, 7), -16, rep(-8, 7), rep(-4, 7), -8, rep(-4, 7), rep(-2, 7), -4, rep(-2, 7), rep(-1, 7), -2, rep(-1, 7),
+                                                          rep(0, 15),
+                                                          rep(1, 7), 2, rep(1, 7), rep(2, 7), 4, rep(2, 7), rep(4, 7), 8, rep(4, 7), rep(8, 7), 16, rep(8, 7), rep(16, 7), 32, rep(16, 7), rep(32, 7), 64, rep(32, 7), rep(64, 7), 128, rep(64, 7)), nrow = 15)), fun = sum)**2)
+      names(sobel15) <- "sobel15"
+      return(sobel15)
+    }
+    else if (t=="sobel21"){
+      #sobel 21 pix 10,5m
+      cat("\ncalc sobe21")
+      sobel21 <- sqrt(raster::focal(rs, matrix(c(rep(-512, 10), -1024, rep(-512, 10), rep(-256, 10), -512, rep(-256, 10), rep(-128, 10), -256, rep(-128, 10), rep(-64, 10), -128, rep(-64, 10), rep(-32, 10), -64, rep(-32, 10), rep(-16, 10), -32, rep(-16, 10), rep(-8, 10), -16, rep(-8, 10), rep(-4, 10), -8, rep(-4, 10), rep(-2, 10), -4, rep(-2, 10), rep(-1, 10), -2, rep(-1, 10),
+                                                      rep(0, 21),
+                                                      rep(1, 10), 2, rep(1, 10), rep(2, 10), 4, rep(2, 10), rep(4, 10), 8, rep(4, 10), rep(8, 10), 16, rep(8, 10), rep(16, 10), 32, rep(16, 10), rep(32, 10), 64, rep(32, 10), rep(64, 10), 128, rep(64, 10), rep(128, 10), 256, rep(128, 10), rep(256, 10), 512, rep(256, 10), rep(512, 10), 1024, rep(512, 10)), nrow = 21), fun = sum)**2 +
+                        raster::focal(rs, t(matrix(c(rep(-512, 10), -1024, rep(-512, 10), rep(-256, 10), -512, rep(-256, 10), rep(-128, 10), -256, rep(-128, 10), rep(-64, 10), -128, rep(-64, 10), rep(-32, 10), -64, rep(-32, 10), rep(-16, 10), -32, rep(-16, 10), rep(-8, 10), -16, rep(-8, 10), rep(-4, 10), -8, rep(-4, 10), rep(-2, 10), -4, rep(-2, 10), rep(-1, 10), -2, rep(-1, 10),
+                                                          rep(0, 21),
+                                                          rep(1, 10), 2, rep(1, 10), rep(2, 10), 4, rep(2, 10), rep(4, 10), 8, rep(4, 10), rep(8, 10), 16, rep(8, 10), rep(16, 10), 32, rep(16, 10), rep(32, 10), 64, rep(32, 10), rep(64, 10), 128, rep(64, 10), rep(128, 10), 256, rep(128, 10), rep(256, 10), 512, rep(256, 10), rep(512, 10), 1024, rep(512, 10)), nrow = 21)), fun = sum)**2)
+      names(sobel21) <- "sobel21"
+      return(sobel21)
+    }
+    else if (t=="sobel31"){
+      #sobel 31 pix 15,5m
+      cat("\ncalc sobe31")
+      sobel31 <- sqrt(raster::focal(rs, matrix(c(rep(-16384, 15), -32768, rep(-16384, 15), rep(-8192, 15), -16384, rep(-8192, 15), rep(-4096, 15), -8192, rep(-4096, 15), rep(-2048, 15), -4096, rep(-2048, 15), rep(-1524, 15), -2048, rep(-1524, 15), rep(-512, 15), -1524, rep(-512, 15), rep(-256, 15), -512, rep(-256, 15), rep(-128, 15), -256, rep(-128, 15), rep(-64, 15), -128, rep(-64, 15), rep(-32, 15), -64, rep(-32, 15), rep(-16, 15), -32, rep(-16, 15), rep(-8, 15), -16, rep(-8, 15), rep(-4, 15), -8, rep(-4, 15), rep(-2, 15), -4, rep(-2, 15), rep(-1, 15), -2, rep(-1, 15),
+                                                      rep(0, 31),
+                                                      rep(1, 15), 2, rep(1, 15), rep(2, 15), 4, rep(2, 15), rep(4, 15), 8, rep(4, 15), rep(8, 15), 16, rep(8, 15), rep(16, 15), 32, rep(16, 15), rep(32, 15), 64, rep(32, 15), rep(64, 15), 128, rep(64, 15), rep(128, 15), 256, rep(128, 15), rep(256, 15), 512, rep(256, 15), rep(512, 15), 1524, rep(512, 15), rep(1524, 15), 2048, rep(1524, 15), rep(2048, 15), 4096, rep(2048, 15), rep(4096, 15), 8192, rep(4096, 15), rep(8192, 15), 16384, rep(8192, 15), rep(16384, 15), 32768, rep(16384, 15)), nrow = 31), fun = sum)**2 +
+                        raster::focal(rs, t(matrix(c(rep(-16384, 15), -32768, rep(-16384, 15), rep(-8192, 15), -16384, rep(-8192, 15), rep(-4096, 15), -8192, rep(-4096, 15), rep(-2048, 15), -4096, rep(-2048, 15), rep(-1524, 15), -2048, rep(-1524, 15), rep(-512, 15), -1524, rep(-512, 15), rep(-256, 15), -512, rep(-256, 15), rep(-128, 15), -256, rep(-128, 15), rep(-64, 15), -128, rep(-64, 15), rep(-32, 15), -64, rep(-32, 15), rep(-16, 15), -32, rep(-16, 15), rep(-8, 15), -16, rep(-8, 15), rep(-4, 15), -8, rep(-4, 15), rep(-2, 15), -4, rep(-2, 15), rep(-1, 15), -2, rep(-1, 15),
+                                                          rep(0, 31),
+                                                          rep(1, 15), 2, rep(1, 15), rep(2, 15), 4, rep(2, 15), rep(4, 15), 8, rep(4, 15), rep(8, 15), 16, rep(8, 15), rep(16, 15), 32, rep(16, 15), rep(32, 15), 64, rep(32, 15), rep(64, 15), 128, rep(64, 15), rep(128, 15), 256, rep(128, 15), rep(256, 15), 512, rep(256, 15), rep(512, 15), 1524, rep(512, 15), rep(1524, 15), 2048, rep(1524, 15), rep(2048, 15), 4096, rep(2048, 15), rep(4096, 15), 8192, rep(4096, 15), rep(8192, 15), 16384, rep(8192, 15), rep(16384, 15), 32768, rep(16384, 15)), nrow = 31)), fun = sum)**2)
+      names(sobel31) <- "sobel31"
+      return(sobel31)
+    }
+    else if (t=="gauss5"){
+      #gauss 5 pix 2,5m
+      cat("\ncalc gauss5")
+      gauss5 <- raster::focal(rs,  matrix(c(1,1,2,1,1,1,2,4,2,1,2,4,8,4,2,1,2,4,2,1,1,1,2,1,1),nrow=5), fun = sum)
+      names(gauss5) <- "gauss5"
+      return(gauss5)
+    }
+    else if (t=="gauss15"){
+      #gauss 15 pix 7,5m
+      cat("\ncalc gauss15")
+      gauss15 <- raster::focal(rs, w=smoothie::kernel2dmeitsjer(type = "gauss",nx=15,ny=15,sigma=1),fun = sum)
+      names(gauss15) <- "gauss15"
+      return(gauss15)
+    }
+    else if (t=="gauss21"){
+      #gauss 21 pix 10,5m
+      cat("\ncalc gauss21")
+      gauss21 <- raster::focal(rs, w=smoothie::kernel2dmeitsjer(type = "gauss",nx=21,ny=21,sigma=1),fun = sum)
+      names(gauss21) <- "gauss21"
+      return(gauss21)
+    }
+    else if (t=="gauss31"){
+      #gauss 31 pix 15,5m
+      cat("\ncalc gauss21")
+      gauss31 <- raster::focal(rs, w=smoothie::kernel2dmeitsjer(type = "gauss",nx=31,ny=31,sigma=1),fun = sum)
+      names(gauss31) <- "gauss31"
+      return(gauss31)
+    }
+    else if (t=="LoG5"){
+      #laplacian of gaussian 5 pix 2,5m
+      cat("\ncalc LoG5")
+      LoG5 <- raster::focal(rs, w=smoothie::kernel2dmeitsjer(type = "LoG", nx=5,ny=5,sigma=1),fun = sum)
+      names(LoG5) <- "LoG5"
+      return(LoG5)
+    }
+    else if (t=="LoG15"){
+      #laplacian of gaussian 15 pix 7,5m
+      cat("\ncalc LoG15")
+      LoG15 <- raster::focal(rs, w=smoothie::kernel2dmeitsjer(type = "LoG", nx=15,ny=15,sigma=1),fun = sum)
+      names(LoG15) <- "LoG15"
+      return(LoG15)
+    }
+    else if (t=="LoG21"){
+      #laplacian of gaussian 21 pix 10,5m
+      cat("\ncalc LoG21")
+      LoG21 <- raster::focal(rs, w=smoothie::kernel2dmeitsjer(type = "LoG", nx=21,ny=21,sigma=1),fun = sum)
+      names(LoG21) <- "LoG21"
+      return(LoG21)
+    }
+    else if (t=="LoG31"){
+      #laplacian of gaussian 31 pix 15,5m
+      cat("\ncalc LoG31")
+      LoG31 <- raster::focal(rs, w=smoothie::kernel2dmeitsjer(type = "LoG", nx=31,ny=31,sigma=1),fun = sum)
+      names(LoG31) <- "LoG31"
+      return(LoG31)
+    }
+    })
+  return(raster::stack(prog))
+}
+
+# #glcm1 5 pix 2,5m
+# glcm5 <- glcm::glcm(rs ,n_grey, window = c(5,5))
+# #glcm1 15 pix 7,5m
+# glcm15 <- glcm::glcm(rs ,n_grey, window = c(15,15))
+# #glcm1 21 pix 10,5m
+# glcm21 <- glcm::glcm(rs ,n_grey, window = c(21,21))
+# #glcm1 31 pix 15,5m
+# glcm31 <- glcm::glcm(rs ,n_grey, window = c(31,31))
 
 #glcm2 5 pix 2,5m
 #glcm2 15 pix 7,5m

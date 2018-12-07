@@ -17,29 +17,34 @@ giLinks$grass<-link2GI::linkGRASS7(returnPath = TRUE)
 chm <- raster::raster(paste0(envrmt$path_data_lidar, "canopy.tif"))
 chm <- raster::focal(chm, matrix(1/9, nrow = 3, ncol = 3), fun = sum)
 
-tiles<- TileManager::TileScheme(chm, dimByCell = c(1000, 1000), buffer = 150, bufferspill = FALSE)
-treepos <- ForestTools::vwf(nadellaub, winFun = function(x){x * 0.06 + 0.6}, minHeight = 12, minWinNeib = "queen", verbose = TRUE, maxWinDiameter = 30)
+tiles<- TileManager::TileScheme(chm, dimByCell = c(1200, 1200), buffer = 50, bufferspill = FALSE)
 
-splitseg <- lapply(seq(2), function (i){
+treepos <- ForestTools::vwf(chm, winFun = function(x){x * 0.061 + 0.6}, minHeight = 8, minWinNeib = "queen", verbose = TRUE, maxWinDiameter = 30)
+
+splitseg <- lapply(seq(16), function (i){
   tmp <- crop(chm,tiles$buffPolygons[i,])
-  crowns <- uavRst::chmseg_FT(treeposFT,tmp,minTreeAlt = 12,format= "polygons", verbose =TRUE)
+  crowns <- uavRst::chmseg_FT(treepos,tmp,minTreeAlt = 8,format= "polygons", verbose =TRUE)
   crs(crowns) <- crs(chm)
-  ids <- na.omit(over(treeposFT,crowns))
+  ids <- na.omit(over(treepos,crowns))
   ids$rownames <- as.numeric(row.names(ids))
   crowns@data$treeID <- ids$rownames
-  crowns <- crop(splitseg[[i]],tiles$tilePolygons[i,])
-  return(crowns)})
+  crowns <- crop(crowns,tiles$tilePolygons[i,])
+  return(crowns)
+})
+
+#writeOGR(crowns, dsn = paste0(envrmt$path_data_lidar, "valtest.shp"), driver = "ESRI Shapefile", layer ="valtest", overwrite_layer = TRUE)
 
 
-#writeOGR(splitseg[[2]], dsn = "D:/ben/goergen/sseg.shp", driver = "ESRI Shapefile", layer ="sseg", overwrite_layer = TRUE)
+writeOGR(splitseg[[1]], dsn = paste0(envrmt$path_data_lidar, "seg3.shp"), driver = "ESRI Shapefile", layer ="seg3", overwrite_layer = TRUE)
+writeOGR(splitseg[[2]], dsn = paste0(envrmt$path_data_lidar, "seg4.shp"), driver = "ESRI Shapefile", layer ="seg4", overwrite_layer = TRUE)
 
 
 cseg <- rbind(splitseg[[1]],splitseg[[2]])
-cseg <- aggregate(cseg,by = "treeID")
-#writeOGR(cseg, dsn = "D:/ben/goergen/merge.shp", driver = "ESRI Shapefile", layer ="merge", overwrite_layer = TRUE)
+cseg <- aggregate(cseg,by = c("treeID", "layer", "height", "winRadius", "crownArea"))
+writeOGR(cseg, dsn = paste0(envrmt$path_data_lidar, "cseg.shp"), driver = "ESRI Shapefile", layer ="cseg", overwrite_layer = TRUE)
 
 
-
+####Testing####
 nadellaub <- raster::raster(paste0(envrmt$path_data_lidar_segtest, "testalle.tif"))
 nadellaub <- raster::focal(nadellaub, matrix(1/9, nrow = 3, ncol = 3), fun = sum)
 writeRaster(nadellaub, paste0(envrmt$path_data_lidar_segtest_nadel_laub_test, "meannadellaub.tif"), overwrite = TRUE)
@@ -48,8 +53,8 @@ writeRaster(nadellaub, paste0(envrmt$path_data_lidar_segtest_nadel_laub_test, "m
 #ForestTools
 #lin <- function(x){x * 0.06 + 0.5}
 #nadellaubFT <- uavRst::treepos_FT(chm=nadellaub, minTreeAlt = 12, maxCrownArea = 15, winFun = lin)
-test <- ForestTools::vwf(nadellaub, winFun = function(x){x * 0.06 + 0.6}, minHeight = 12, minWinNeib = "queen", verbose = TRUE, maxWinDiameter = 30)
-crnadellaubFT <- uavRst::chmseg_FT(treepos = test, chm = nadellaub, minTreeAlt = 12, format = "polygons", verbose = TRUE)
+test <- ForestTools::vwf(nadellaub, winFun = function(x){x * 0.061 + 0.6}, minHeight = 8, minWinNeib = "queen", verbose = TRUE, maxWinDiameter = 30)
+crnadellaubFT <- uavRst::chmseg_FT(treepos = test, chm = nadellaub, minTreeAlt = 8, format = "polygons", verbose = TRUE)
 writeOGR(crnadellaubFT, paste0(envrmt$path_data_lidar_segtest_nadel_laub_test, "crnadellaubFT_mean.shp"), "crnadellaubFTmean", driver="ESRI Shapefile", overwrite_layer = TRUE)
 
 #ITC
@@ -79,5 +84,4 @@ writeOGR(crnadellaubRL, paste0(envrmt$path_data_lidar_segtest_nadel_laub_test, "
 
 
 
-
-
+plot(nadellaub, add=TRUE, col = grey.colors(10, start = 0.3, end = 0.9, gamma = 2.2, alpha = NULL))

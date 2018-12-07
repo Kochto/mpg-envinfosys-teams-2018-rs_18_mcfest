@@ -12,6 +12,8 @@ FT NOMEAN
 FT MEAN 3*3
 108, test <- ForestTools::vwf(nadellaub, winFun = function(x){x * 0.08 + 0.6}, minHeight = 12, minWinNeib = "queen", verbose = TRUE, maxWinDiameter = 30)
 126, test <- ForestTools::vwf(nadellaub, winFun = function(x){x * 0.07 + 0.6}, minHeight = 12, minWinNeib = "queen", verbose = TRUE, maxWinDiameter = 30)
+138, test <- ForestTools::vwf(nadellaub, winFun = function(x){x * 0.061 + 0.6}, minHeight = 8, minWinNeib = "queen", verbose = TRUE, maxWinDiameter = 30)
+
 
 ITC MEAN 3*3
 141, crnadellaubITC <- uavRst::chmseg_ITC(chm = nadellaub, EPSG = 25832, minTreeAlt = 12, maxCrownArea = 120, movingWin = 5)

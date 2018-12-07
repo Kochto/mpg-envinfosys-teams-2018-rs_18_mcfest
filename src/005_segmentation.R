@@ -16,6 +16,7 @@ giLinks$grass<-link2GI::linkGRASS7(returnPath = TRUE)
 #To test if 3 by 3 focal mean has an impact see master thesis finn
 chm <- raster::raster(paste0(envrmt$path_data_lidar, "canopy.tif"))
 chm <- raster::focal(chm, matrix(1/9, nrow = 3, ncol = 3), fun = sum)
+writeRaster(chm, filename = paste0(envrmt$path_data_lidar, "chm_mean.tif"))
 
 tiles<- TileManager::TileScheme(chm, dimByCell = c(1200, 1200), buffer = 50, bufferspill = FALSE)
 
@@ -34,14 +35,26 @@ splitseg <- lapply(seq(16), function (i){
 
 #writeOGR(crowns, dsn = paste0(envrmt$path_data_lidar, "valtest.shp"), driver = "ESRI Shapefile", layer ="valtest", overwrite_layer = TRUE)
 
+for (l in 1:length(splitseg)){
+  writeOGR(splitseg[[l]], dsn = paste0(envrmt$path_data_mof, "seg", l, ".shp"), driver = "ESRI Shapefile", layer = paste0("seg", l), overwrite_layer = TRUE)
+}
 
-writeOGR(splitseg[[1]], dsn = paste0(envrmt$path_data_lidar, "seg3.shp"), driver = "ESRI Shapefile", layer ="seg3", overwrite_layer = TRUE)
-writeOGR(splitseg[[2]], dsn = paste0(envrmt$path_data_lidar, "seg4.shp"), driver = "ESRI Shapefile", layer ="seg4", overwrite_layer = TRUE)
+for (l in 1:length(splitseg)){
+  tem <- splitseg[[l]]
+  if (l==1){
+    cseg <- tem
+  }
+  else{
+    cseg <- rbind(cseg, tem)
+  }
+}
 
-
-cseg <- rbind(splitseg[[1]],splitseg[[2]])
 cseg <- aggregate(cseg,by = c("treeID", "layer", "height", "winRadius", "crownArea"))
-writeOGR(cseg, dsn = paste0(envrmt$path_data_lidar, "cseg.shp"), driver = "ESRI Shapefile", layer ="cseg", overwrite_layer = TRUE)
+writeOGR(cseg, dsn = paste0(envrmt$path_data_mof, "cseg.shp"), driver = "ESRI Shapefile", layer ="cseg", overwrite_layer = TRUE)
+
+cseg55 <- cseg[cseg@data$crownArea>5.5,]
+writeOGR(cseg55, dsn = paste0(envrmt$path_data_mof, "cseg55.shp"), driver = "ESRI Shapefile", layer ="cseg55", overwrite_layer = TRUE)
+
 
 
 ####Testing####

@@ -3,7 +3,7 @@ root_folder <- envimaR::alternativeEnvi(root_folder = "~/edu/mpg-envinsys-plygrn
 
 #Set librarys
 libs = c("lidR", "link2GI", "mapview", "raster", "rgdal", "rlas", 
-         "sp", "RStoolbox", "glcm", "smoothie", "meteo", "TileManager")
+         "sp", "RStoolbox", "glcm", "TileManager", "factoextra", "smoothie")
 lapply(libs, require, character.only = TRUE)
 
 # Set project specific subfolders

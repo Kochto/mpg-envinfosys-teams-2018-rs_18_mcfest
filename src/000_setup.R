@@ -13,7 +13,8 @@ project_folders = c("data/",                                 # data folders
                     "data/mof/", "data/tmp/", "data/aerial_processed/", "data/validation/",
                     "run/", "log/", "data/lidar/", "data/plots/",                  # bins and logging
                     "mpg-envinfosys-teams-2018-rs_18_mcfest/src/",   # source code
-                    "mpg-envinfosys-teams-2018-rs_18_mcfest/doc/")   # markdown etc. 
+                    "mpg-envinfosys-teams-2018-rs_18_mcfest/doc/",
+                    "mpg-envinfosys-teams-2018-rs_18_mcfest/Val_Tree_pos_Group/")   # markdown etc. 
 
 envrmt = link2GI::initProj(projRootDir = root_folder, GRASSlocation = "data/grass",
                            projFolders = project_folders, path_prefix = "path_", 

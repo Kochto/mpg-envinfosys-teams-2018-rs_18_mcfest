@@ -171,122 +171,6 @@ rgbIndices<- function(rgb,
   return(raster::stack(indices))
 }
 
-####filter function####
-#by Goergen@https://github.com/GeoMOER-Students-Space/mpg-envinfosys-teams-2018-rs_18_axmideda/blob/master/src/filterFunction.R
-
-# fil <- function(rs, filters = c("mean3","mean5","mean7","sd3","sd5","sd7","sbh3","sbv3","sbh5","sbv5","laplc5","gauss5"),path = NULL,...){
-#   
-#   filt <- list()
-#   
-#   for (i in 1:nlayers(rs)){
-#     
-#     filtered <- lapply(filters, function(item) {
-#       
-#       if (item == "mean3"){
-#       
-#       cat("\napplying 3x3 mean filter")
-#       
-#       mean3 <- raster::focal(rs[[i]], matrix(1/9,nrow=3,ncol=3))
-#       names(mean3) <- "mean3"
-#       return(mean3)
-#       
-#     } else if (item == "mean5"){
-#       
-#       cat("\napplying 5x5 mean filter")
-#       
-#       mean5 <- raster::focal(rs[[i]], matrix(1/25,nrow=5,ncol=5), fun = sum)
-#       names(mean5) <- "mean5"
-#       return(mean5)
-#       
-#     } else if (item == "mean7"){
-# 
-#       cat("\napplying 7x7 mean filter")
-# 
-#       mean7 <- raster::focal(rs[[i]], matrix(1/49),nrow=7,ncol=7)
-#       names(mean7) <- "mean7"
-#       return(mean7)
-# 
-#     } else if (item == "sd3") {
-# 
-#       cat("\napplying 3x3 standard deviation filter")
-# 
-#       sd3 <- raster::focal(rs[[i]], matrix(1,3,3), fun = sd)
-#       names(sd3) <- "sd3"
-#       return(sd3)
-# 
-#     } else if (item == "sd5"){
-# 
-#       cat("\napplying 5x5 standard deviation filter")
-# 
-#       sd5 <- raster::focal(rs[[i]], matrix(1,5,5), fun = sd)
-#       names(sd5) <- "sd5"
-#       return(sd5)
-# 
-#     } else if (item == "sd7"){
-# 
-#       cat("\napplying 7x7 standard deviation filter")
-# 
-#       sd7 <- raster::focal(rs[[i]], matrix(1,7,7), fun = sd)
-#       names(sd7) <- "sd7"
-#       return(sd7)
-# 
-#     } else if (item == "sbh3") {
-# 
-#       cat("\napplying sobel 3x3 horizontal filter")
-# 
-#       sbh3 <- raster::focal(rs[[i]], matrix(c(-1,0,1,-2,0,2,-1,0,1)/4,nrow=3), fun = sum)
-#       names(sbh3) <- "sbh3"
-#       return(sbh3)
-# 
-#     } else if (item == "sbv3"){
-# 
-#       cat("\napplying sobel 3x3 vertical filter")
-# 
-#       sbv3 <- raster::focal(rs[[i]], matrix(c(-1,-2,-1,0,0,0,1,2,1),nrow=3), fun = sum)
-#       names(sbv3) <- "sbv3"
-#       return(sbv3)
-#       
-#     } else if (item == "sbh5"){
-#       
-#       cat("\napplying sobel 5x5 horizontal filter")
-#       
-#       sbh5 <- raster::focal(rs[[i]], matrix(c(2,1,0,-1,-2,2,1,0,-2,-1,4,2,0,-2,-4,2,1,0,-1,-2,2,1,0,-1,-2),nrow=5), fun = sum)
-#       names(sbh5) <- "sbh5"
-#       return(sbh5)
-#       
-#     } else if (item == "sbv5"){
-#       
-#       cat("\napplying sobel 5x5 vertical filter")
-#       
-#       sbv5 <- raster::focal(rs[[i]], matrix(c(-2,-2,-4,-2,-2,-1,-1,-2,-1,-1,0,0,0,0,0,1,1,2,1,1,2,2,4,2,2),nrow=5), fun = sum)
-#       names(sbv5) <- "sbv5"
-#       return(sbv5)
-#       
-#     } else if (item == "laplc5"){
-#       
-#       cat("\napplying laplace filter")
-#       
-#       laplc5 <- raster::focal(rs[[i]], matrix(c(0,1,0,1,0,1,0,1,0,1,0,1,-12,1,0,1,0,1,0,1,0,1,0,1,0)/12, nrow=5), fun = sum)
-#       names(laplc5) <- "laplc5"
-#       return(laplc5)
-#       
-#     } else if (item == "gauss5"){
-#       
-#       cat("\napplying gauss5 filter")
-#       
-#       gauss5 <- raster::focal(rs[[i]], matrix(c(1,1,2,1,1,1,2,4,2,1,2,4,8,4,2,1,2,4,2,1,1,1,2,1,1)/8,nrow=5), fun = sum)
-#       names(gauss5) <- "gauss5"
-#       return(gauss5)
-#       
-#     }
-#       
-#     })
-#     # cat(paste0("\nWriting raster of ",names(rs)[i],"."))
-#     # filtered <- raster::stack(filtered)
-#     # writeRaster(filtered, filename = paste0(path,names(rs)[i],"_"), format = "GTiff",bylayer=TRUE,suffix=filters)
-#     return(raster::stack(filtered))
-#   }
-# }
 ####filter scratch####
 
 filter <- function(rs, fil=c("mean5", "mean15", "mean21", "mean31", "sobel5", "sobel15", "sobel21", "sobel31", 
@@ -444,3 +328,38 @@ filter <- function(rs, fil=c("mean5", "mean15", "mean21", "mean31", "sobel5", "s
 #haralick 15 pix 7,5m
 #haralick 21 pix 10,5m
 #haralick 31 pix 15,5m
+
+####function segement test####
+ft <- function(raster, mul, sum, minHeight){
+  
+  pos <- ForestTools::vwf(raster, winFun = function(x){x * mul + sum}, 
+                          minHeight = minHeight, minWinNeib = "queen", verbose = TRUE, maxWinDiameter = 30)
+  crow <- uavRst::chmseg_FT(treepos = pos, chm = raster, minTreeAlt = minHeight, format = "polygons", verbose = TRUE)
+  
+  writeOGR(crow, paste0(envrmt$path_data_lidar_segtest_nadel_laub_test, "functionft.shp"), 
+            "functionft", driver="ESRI Shapefile", overwrite_layer = TRUE)
+  
+  pts <- rgdal::readOGR(dsn = paste0(envrmt$`path_mpg-envinfosys-teams-2018-rs_18_mcfest_Val_Tree_pos_Group`,
+                                     "Val_Tree_pos_Group.shp"), layer = "Val_Tree_pos_Group")
+  pts <- spTransform(pts,crs(crow))
+  
+  pwp <- sp::over(SpatialPoints(pts),SpatialPolygons(crow@polygons), returnList = TRUE)
+  pwp <- data.frame(unlist(pwp))
+  pwp$pts <- rownames(pwp)
+  names(pwp) <- c("polygons", "pts")
+  
+  
+  pb <- length(unique(pwp$polygons)) # polygons with == one tree
+  bkp <- length(pts@data$id) - length(pwp$polygons)  # gibt es nicht, da keine b?ume ohne polygon
+  pkb <- length(crow@data$layer) - length(pwp$polygons) #empty polygons - polygon without a tree
+  mbp <- length(pwp$polygons)- pb #polygons with more than one tree
+  total_poly <- length(crow@data$layer)
+  
+  hit_ratio <- pb/length(crow@data$layer) #polygons with one tree on all validation points
+  miss_ratio <- 1-(length(pwp$polygons)/length(crow@data$layer)) #ratio of empty polygons to all created polygons
+  perf <- data.frame(pb, bkp, pkb, mbp, total_poly, hit_ratio, miss_ratio, mul, sum, minHeight)
+  cat("\n")
+  cat("\n")
+  return(perf)
+}
+

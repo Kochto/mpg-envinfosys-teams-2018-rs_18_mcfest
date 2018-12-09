@@ -25,7 +25,7 @@ abt<- readOGR(paste0(envrmt$path_data_mof, "uwcAbteilung.shp"),
 crs(abt)
 
 #Cropping relevant images (picture one and two do not overlap with the bounding box - no cropping required)
-cropped <- lapply(imagelist[3:length(imagelist)], crop, abt)
+cropped <- lapply(imagelist[3:length(imagelist)], raster::crop, abt)
 
 #(Optional) write out cropped raster
 for (l in cropped[1:length(cropped)]) {
@@ -35,11 +35,11 @@ for (l in cropped[1:length(cropped)]) {
 }
 
 #Merging the "stripes" toghether with the actual images
-imagelist_3_4_cm <- mosaic(cropped$`3`,cropped$`4`, fun="min", filename=paste0(envrmt$path_data_aerial_processed, "b3_4_cm.tif"))
-imagelist_5_6_cm <- mosaic(cropped$`5`, cropped$`6`, fun="min", filename=paste0(envrmt$path_data_aerial_processed, "b5_6_cm.tif"))
+imagelist_3_4_cm <- raster::mosaic(cropped$`3`,cropped$`4`, fun="min", filename=paste0(envrmt$path_data_aerial_processed, "b3_4_cm.tif"))
+imagelist_5_6_cm <- raster::mosaic(cropped$`5`, cropped$`6`, fun="min", filename=paste0(envrmt$path_data_aerial_processed, "b5_6_cm.tif"))
 
 #creating one mosaic
-img <- merge(imagelist_3_4_cm, imagelist_5_6_cm, cropped$`7`, cropped$`8`, filename=paste0(envrmt$path_data_aerial_processed, "img.tif"))
+img <- raster::merge(imagelist_3_4_cm, imagelist_5_6_cm, cropped$`7`, cropped$`8`, filename=paste0(envrmt$path_data_aerial_processed, "img.tif"))
 
 #Plot final image and shapefile togehter
 plotRGB(brick(paste0(envrmt$path_data_aerial_processed, "img.tif")))

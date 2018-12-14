@@ -12,14 +12,13 @@ giLinks$grass<-link2GI::linkGRASS7(returnPath = TRUE)
 
 #To test if 3 by 3 focal mean has an impact see master thesis finn
 chm <- raster::raster(paste0(envrmt$path_data_lidar, "canopy.tif"))
-
 chm <- raster::focal(chm, matrix(1/9, nrow = 3, ncol = 3), fun = sum) #apply a 3x3 focal mean filter
-writeRaster(chm, filename = paste0(envrmt$path_data_lidar, "chm_mean.tif")) #write the mean filter to the disk
+#writeRaster(chm, filename = paste0(envrmt$path_data_lidar, "chm_mean.tif")) #write the mean filter to the disk
 
 tiles<- TileManager::TileScheme(chm, dimByCell = c(1200, 1200), buffer = 50, bufferspill = FALSE) #setup tiles to process image on
 
 #Calculate treepositions for the entire forest
-treepos <- ForestTools::vwf(chm, winFun = function(x){x * 0.061 + 0.6}, minHeight = 8, minWinNeib = "queen", verbose = TRUE, maxWinDiameter = 30)
+treepos <- ForestTools::vwf(chm, winFun = function(x){x * 0.0705 + 0.5}, minHeight = 8, minWinNeib = "queen", verbose = TRUE, maxWinDiameter = 30)
 
 splitseg <- lapply(seq(16), function (i){
   tmp <- raster::crop(chm,tiles$buffPolygons[i,]) #Crop averaged crown model to the size of each tile
@@ -50,82 +49,68 @@ for (l in 1:length(splitseg)){ #bind all layers created by the above function to
 }
 
 
-cseg <- sp::aggregate(cseg,by = c("treeID", "layer", "height", "winRadius", "crownArea")) #aggregate polygon layers together while preserving it's attribute table
+cseg <- aggregate(cseg,by = c("treeID", "layer", "height", "winRadius", "crownArea")) #aggregate polygon layers together while preserving it's attribute table
 writeOGR(cseg, dsn = paste0(envrmt$path_data_mof, "cseg.shp"), driver = "ESRI Shapefile", layer ="cseg", overwrite_layer = TRUE)
 
 cseg55 <- cseg[cseg@data$crownArea>5.5,] #filter out polygons (trees) lower than 5.5 square meters 
 writeOGR(cseg55, dsn = paste0(envrmt$path_data_mof, "cseg55.shp"), driver = "ESRI Shapefile", layer ="cseg55", overwrite_layer = TRUE)
+cseg55 <- readOGR(paste0(envrmt$path_data_mof, "cseg55.shp"), layer = "cseg55")
+
+head(cseg55@data)
+mean(cseg55@data$height)
+mean(cseg55@data$crownArea)
+length(cseg55@polygons)
+
+
+boxplot(cseg55@data$crownArea)
+boxplot(cseg55@data$height)
+hist(cseg55@data$height)
+hist(cseg55@data$crownArea)
 
 
 ###Testing area####
+nadellaub <- raster::raster(paste0(envrmt$path_data_lidar_segtest, "testalle.tif"))
+nadellaub <- raster::focal(nadellaub, matrix(1/9, nrow = 3, ncol = 3), fun = sum)
 
-nadellaub <- raster::raster(paste0(envrmt$path_data_lidar_segtest_nadel_laub_test, "meannadellaub.tif"))
-# nadellaub <- raster::focal(nadellaub, matrix(1/9, nrow = 3, ncol = 3), fun = sum)
-# writeRaster(nadellaub, paste0(envrmt$path_data_lidar_segtest_nadel_laub_test, "meannadellaub.tif"), overwrite = TRUE)
+test <- ft(raster = nadellaub, mul = 0.0705, sum = 0.5, minHeight = 8)
 
-#ForestTools
-#lin <- function(x){x * 0.06 + 0.5}
-
-stats <- list()
-stats[[18]] <- ft(raster = nadellaub, mul = 0.031, sum = 0.6, minHeight = 8)
 saveRDS(stats, paste0(envrmt$path_data, "stats.rds"))
+stats <- readRDS(paste0(envrmt$path_data, "stats.rds"))
+
+tre <- ForestTools::vwf(nadellaub, winFun = function(x){x * 0.0705 + 0.5}, minHeight = 8, minWinNeib = "queen", verbose = TRUE, maxWinDiameter = 30)
+crow <- uavRst::chmseg_FT(treepos = tre, chm = nadellaub, minTreeAlt = 8, format = "polygons", verbose = TRUE)
+writeOGR(crow, paste0(envrmt$path_data_lidar_segtest_nadel_laub_test, "crow.shp"), "crow", driver="ESRI Shapefile", overwrite_layer = TRUE)
 
 
-tre <- ForestTools::vwf(nadellaub, winFun = function(x){x * 0.05 + 0.6}, minHeight = 8, minWinNeib = "queen", verbose = TRUE, maxWinDiameter = 30)
-crnadellaubFT <- uavRst::chmseg_FT(treepos = tre, chm = nadellaub, minTreeAlt = 8, format = "polygons", verbose = TRUE)
-writeOGR(crnadellaubFT, paste0(envrmt$path_data_lidar_segtest_nadel_laub_test, "crnadellaubFT_mean.shp"), "crnadellaubFTmean", driver="ESRI Shapefile", overwrite_layer = TRUE)
+pts <- rgdal::readOGR(dsn = paste0(envrmt$`path_mpg-envinfosys-teams-2018-rs_18_mcfest_Val_Tree_pos_Group`,
+                                   "Val_Tree_pos_Group.shp"), layer = "Val_Tree_pos_Group")
+pts <- spTransform(pts,crs(crow))
 
 
 
-pts <- rgdal::readOGR(dsn = "F:/09_Semester/mpg-envinsys-plygrnd/mpg-envinfosys-teams-2018-rs_18_mcfest/Val_Tree_pos_Group/Val_Tree_pos_Group.shp", layer = "Val_Tree_pos_Group")
+#Ideas for tomorrow
+##Crown diameter assuming crown is nearly round
+crow@data$crownDiameter <- sqrt(crnadellaubFT[["crownArea"]]/ pi) * 2
+
+
+##Validation statistics
+pts <- rgdal::readOGR(dsn = paste0(envrmt$`path_mpg-envinfosys-teams-2018-rs_18_mcfest_Val_Tree_pos_Group`,
+                                   "Val_Tree_pos_Group.shp"), layer = "Val_Tree_pos_Group")
+pts@data$id <- 1:nrow(pts@data)
 pts <- spTransform(pts,crs(crnadellaubFT))
-
-test <- sp::over(SpatialPoints(pts),SpatialPolygons(crnadellaubFT@polygons), returnList = TRUE)
-test <- data.frame(unlist(test))
-test$pts <- rownames(test)
-names(test) <- c("polygons", "pts")
+stats <- ForestTools::sp_summarise(trees = pts, areas = crow)
+crow@data$TreeCount <- stats@data$TreeCount
+crow@data$TreeCount [is.na(crow@data$TreeCount)] <- 0
 
 
-#==============================
-pb <- length(unique(test$polygons)) # polygons with == one tree
-# bkp gibt es nicht, da keine bäume ohne polygon
-pkb <- length(crnadellaubFT@data$layer)- length(test$polygons) #empty polygons - polygon without a tree
-mbp <- length(test$polygons)- pb #polygons with more than one tree
-
-hit_ratio <- pb/length(crnadellaubFT@data$layer) #polygons with one tree on all calculated polygons
-miss_ratio <- 1-(length(test$polygons)/length(crnadellaubFT@data$layer)) #ratio of empty polygons to all created polygons
-
-
-     
-     
-# sum(duplicated(test)==FALSE)/131
-#      
-#      
-# test <- sp::over(SpatialPoints(shp),SpatialPolygons(segITC@polygons), returnList = TRUE)
-# test <- unlist(test)
-#      
-#    
-# sum(duplicated(test$)==FALSE)/175 #TP
-# 
-# 1-sum(duplicated(test)==FALSE)/175 # FP
-# (175-length(unique(test[-duplicated(test)])))/175   #FP
-     
+length(pts@data$id)/length(crnadellaubFT@data$layer) #trees per polygon
+summary(crow@data)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+# plot(stats, col = heat.colors(150)[order(stats$TreeCount)])
+# library(rgeos)
+# text(gCentroid(pts, byid = TRUE), stats[["height"]], col = "darkmagenta", font = 2)
 
 
 # #ITC

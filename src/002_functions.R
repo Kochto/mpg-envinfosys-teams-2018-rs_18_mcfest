@@ -336,28 +336,48 @@ ft <- function(raster, mul, sum, minHeight){
                           minHeight = minHeight, minWinNeib = "queen", verbose = TRUE, maxWinDiameter = 30)
   crow <- uavRst::chmseg_FT(treepos = pos, chm = raster, minTreeAlt = minHeight, format = "polygons", verbose = TRUE)
   
-  writeOGR(crow, paste0(envrmt$path_data_lidar_segtest_nadel_laub_test, "functionft.shp"), 
-            "functionft", driver="ESRI Shapefile", overwrite_layer = TRUE)
-  
   pts <- rgdal::readOGR(dsn = paste0(envrmt$`path_mpg-envinfosys-teams-2018-rs_18_mcfest_Val_Tree_pos_Group`,
                                      "Val_Tree_pos_Group.shp"), layer = "Val_Tree_pos_Group")
   pts <- spTransform(pts,crs(crow))
   
-  pwp <- sp::over(SpatialPoints(pts),SpatialPolygons(crow@polygons), returnList = TRUE)
-  pwp <- data.frame(unlist(pwp))
-  pwp$pts <- rownames(pwp)
-  names(pwp) <- c("polygons", "pts")
+  pwp <- ForestTools::sp_summarise(trees = pts, areas = crow)
+  crow@data$TreeCount <- pwp@data$TreeCount
+  crow@data$TreeCount [is.na(crow@data$TreeCount)] <- 0
   
+  writeOGR(crow, paste0(envrmt$path_data_lidar_segtest_nadel_laub_test, "crow.shp"),
+           "crow", driver="ESRI Shapefile", overwrite_layer = TRUE)
+  #crow <- readOGR(dsn = "F:/09_Semester/mpg-envinsys-plygrnd/data/lidar/segtest/nadel_laub_test/crow.shp", layer = "crow")
   
-  pb <- length(unique(pwp$polygons)) # polygons with == one tree
-  bkp <- length(pts@data$id) - length(pwp$polygons)  # gibt es nicht, da keine b?ume ohne polygon
-  pkb <- length(crow@data$layer) - length(pwp$polygons) #empty polygons - polygon without a tree
-  mbp <- length(pwp$polygons)- pb #polygons with more than one tree
+  #General
+  total_points <- length(pts@data$id)
   total_poly <- length(crow@data$layer)
   
-  hit_ratio <- pb/length(crow@data$layer) #polygons with one tree on all validation points
-  miss_ratio <- 1-(length(pwp$polygons)/length(crow@data$layer)) #ratio of empty polygons to all created polygons
-  perf <- data.frame(pb, bkp, pkb, mbp, total_poly, hit_ratio, miss_ratio, mul, sum, minHeight)
+  #Poly stats
+  pb <- length(crow@data$TreeCount[crow@data$TreeCount == 1]) # polygons with == one tree
+  pkb <- length(crow@data$TreeCount[crow@data$TreeCount < 1]) #empty polygons - polygon without a tree
+  mbp <- length(crow@data$TreeCount[crow@data$TreeCount > 1]) #polygons with more than one tree
+  hit_ratio <- (pb+mbp) / length(crow@data$layer) #polygons with one tree plus polys with multiple trees on all validation points
+  acc <- pb / length(crow@data$layer)
+  balance <- hit_ratio - acc
+  error_ratio <- pkb / length(crow@data$layer) #ratio of empty polygons to all created polygons
+  dev <- (abs(total_poly-total_points))/(total_points) #percentage of deviation of polys to points
+  
+  
+  #Tree stats
+  twop <- sum(crow@data$TreeCount[crow@data$TreeCount > 1])- mbp
+  top <- sum(crow@data$TreeCount) - twop
+  
+  #percentage of trees without own polygon
+  twup <- (sum(crow@data$TreeCount[crow@data$TreeCount > 1])- mbp) / (sum(crow@data$TreeCount [crow@data$TreeCount == 1]) + sum(crow@data$TreeCount [crow@data$TreeCount > 1]))
+  #percentage trees with own polygon
+  thup <- 1 - twup
+  
+  tre_tot_bal <- sum(crow@data$TreeCount [crow@data$TreeCount > 1])
+  
+  metrics <- data.frame(mul, sum)
+  poly <- data.frame(pb, pkb, mbp, hit_ratio, total_poly, acc, balance, error_ratio, dev)
+  tree <- data.frame(twop, top, twup, thup, total_points, tre_tot_bal)
+  perf <- list(metrics, poly, tree)
   cat("\n")
   cat("\n")
   return(perf)

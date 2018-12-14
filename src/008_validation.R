@@ -3,21 +3,66 @@ root_folder <- envimaR::alternativeEnvi(root_folder = "~/edu/mpg-envinsys-plygrn
 
 source(paste0(root_folder, "/mpg-envinfosys-teams-2018-rs_18_mcfest/src/000_setup.R"))
 
-pts <- rgdal::readOGR(dsn = "F:/09_Semester/mpg-envinsys-plygrnd/mpg-envinfosys-teams-2018-rs_18_mcfest/Val_Tree_pos_Group/Val_Tree_pos_Group.shp", layer = "Val_Tree_pos_Group")
-pts <- spTransform(pts,crs(crnadellaubFT))
+nadellaub <- raster::raster(paste0(envrmt$path_data_lidar_segtest, "testalle.tif"))
+nadellaub <- raster::focal(nadellaub, matrix(1/9, nrow = 3, ncol = 3), fun = sum)
+# writeRaster(nadellaub, paste0(envrmt$path_data_lidar_segtest_nadel_laub_test, "meannadellaub.tif"), overwrite = TRUE)
 
-test <- sp::over(SpatialPoints(pts),SpatialPolygons(crnadellaubFT@polygons), returnList = TRUE)
-test <- data.frame(unlist(test))
-test$pts <- rownames(test)
-names(test) <- c("polygons", "pts")
+#ForestTools
+#lin <- function(x){x * 0.06 + 0.5}
 
+x <-0
+stats <- list()
+for (i in seq(0.0700,0.071, 0.0001)){
+  x <- x+1
+  stats[[x]] <- ft(raster = nadellaub, mul = i, sum = 0.5, minHeight = 8)
+}
 
-pb <- length(unique(test$polygons)) # polygons with == one tree
-# bkp gibt es nicht, da keine bäume ohne polygon
-pkb <- length(crnadellaubFT@data$layer)/ length(test$polygons) #empty polygons - polygon without a tree
-mbp <- length(test$polygons)- pb #polygons with more than one tree
+mul_x <-c()
+for (i in 1:length(stats)){
+  mul_x <- c(mul_x, stats[[i]][[1]][[1]])
+}
 
-hit_ratio <- pb/length(crnadellaubFT@data$layer) #polygons with one tree on all calculated polygons
-miss_ratio <- 1-(length(test$polygons)/length(crnadellaubFT@data$layer)) #ratio of empty polygons on all created polygons
+sum_x <-c()
+for (i in 1:length(stats)){
+  sum_x <- c(sum_x, stats[[i]][[1]][[2]])
+}
 
-data.frame(pb, pkb, mbp, hit_ratio, miss_ratio)
+thup_x <- c()
+for (i in 1:length(stats)){
+  thup_x <- c(thup_x, stats[[i]][[3]][[4]])
+}
+
+acc_x <- c()
+for (i in 1:length(stats)){
+  acc_x <- c(acc_x, stats[[i]][[2]][[6]])
+}
+
+err_x <- c()
+for (i in 1:length(stats)){
+  err_x <- c(err_x, stats[[i]][[2]][[8]])
+}
+
+dev_x <- c()
+for (i in 1:length(stats)){
+  dev_x <- c(dev_x, stats[[i]][[2]][[9]])
+}
+
+hit_x <- c()
+for (i in 1:length(stats)){
+  hit_x <- c(hit_x, stats[[i]][[2]][[4]])
+}
+
+hit_x <- c()
+for (i in 1:length(stats)){
+  hit_x <- c(hit_x, stats[[i]][[2]][[4]])
+}
+
+plotframe <- data.frame(thup_x, acc_x, err_x, dev_x, hit_x, mul_x)
+# saveRDS(plotframe, paste0(envrmt$path_data_plots, "plotframe_spec05.rds"))
+# saveRDS(plotframe, paste0(envrmt$path_data_plots, "plotframe_range.rds"))
+# saveRDS(plotframe, paste0(envrmt$path_data_plots, "plotframe_spec.rds"))
+# saveRDS(plotframe, paste0(envrmt$path_data_plots, "plotframe_diff.rds"))
+# saveRDS(plotframe, paste0(envrmt$path_data_plots, "plotframe_sum_range.rds"))
+# saveRDS(plotframe, paste0(envrmt$path_data_plots, "plotframe_mul_range_sum05.rds"))
+
+#plotframe <- readRDS(paste0(envrmt$path_data_validation, "plotframe_spec05.rds"))

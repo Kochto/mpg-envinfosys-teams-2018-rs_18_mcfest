@@ -330,21 +330,20 @@ filter <- function(rs, fil=c("mean5", "mean15", "mean21", "mean31", "sobel5", "s
 #haralick 31 pix 15,5m
 
 ####function segement test####
-ft <- function(raster, mul, sum, minHeight){
+ft <- function(raster, mul, sum, minHeight, points, lay){
   
   pos <- ForestTools::vwf(raster, winFun = function(x){x * mul + sum}, 
                           minHeight = minHeight, minWinNeib = "queen", verbose = TRUE, maxWinDiameter = 30)
   crow <- uavRst::chmseg_FT(treepos = pos, chm = raster, minTreeAlt = minHeight, format = "polygons", verbose = TRUE)
   
-  pts <- rgdal::readOGR(dsn = paste0(envrmt$`path_mpg-envinfosys-teams-2018-rs_18_mcfest_Val_Tree_pos_Group`,
-                                     "Val_Tree_pos_Group.shp"), layer = "Val_Tree_pos_Group")
+  pts <- rgdal::readOGR(dsn = points, layer = lay)
   pts <- spTransform(pts,crs(crow))
   
   pwp <- ForestTools::sp_summarise(trees = pts, areas = crow)
   crow@data$TreeCount <- pwp@data$TreeCount
   crow@data$TreeCount [is.na(crow@data$TreeCount)] <- 0
   
-  writeOGR(crow, paste0(envrmt$path_data_lidar_segtest_nadel_laub_test, "crow.shp"),
+  writeOGR(crow, paste0(envrmt$path_data_validation, "crow.shp"),
            "crow", driver="ESRI Shapefile", overwrite_layer = TRUE)
   #crow <- readOGR(dsn = "F:/09_Semester/mpg-envinsys-plygrnd/data/lidar/segtest/nadel_laub_test/crow.shp", layer = "crow")
   

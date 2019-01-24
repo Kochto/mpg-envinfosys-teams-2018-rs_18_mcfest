@@ -3,13 +3,74 @@ root_folder <- envimaR::alternativeEnvi(root_folder = "~/edu/mpg-envinsys-plygrn
 
 source(paste0(root_folder, "/mpg-envinfosys-teams-2018-rs_18_mcfest/src/000_setup.R"))
 
-mof <- uavRst::make_lidr_catalog(paste0(envrmt$path_data_lidar_org), chunksize = 100, 
+files <- list.files(envrmt$path_data_lidar_org, pattern = "*.las", full.names = TRUE)
+
+#Correct Points
+#uavRst::llas2llv0(files,paste0(envrmt$path_data_lidar_org_corrected))
+mof <- uavRst::make_lidr_catalog(paste0(envrmt$path_data_lidar_org_corrected), chunksize = 100, 
                                  chunkbuffer = 10, cores = 4)
 crs(mof) <- "+proj=utm +zone=32 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"
 
-lidR::opt_output_files(mof)<-paste0(envrmt$path_data_lidar_csf,"{ID}_csf")
+#Normalize data points (height)
+lidR::opt_output_files(mof)<- paste0(envrmt$path_data_lidar_norm, "{ID}_norm")
+mof_norm <- lidR::lasnormalize(mof, lidR::tin())
+mof_corrnorm <- uavRst::make_lidr_catalog(paste0(envrmt$path_data_lidar_norm), chunksize = 100,
+                                          chunkbuffer = 10, cores = 4)
 
-# mof_csf<- lidR::lasground(mof, csf())
+#reclassify ground points
+lidR::opt_output_files(mof_corrnorm)<-paste0(envrmt$path_data_lidar_csf,"{ID}_csf")
+mof_ground_csf <- lidR::lasground(mof_corrnorm, csf())
+mof_cat_csf <- uavRst::make_lidr_catalog(paste0(envrmt$path_data_lidar_csf), chunksize = 100, 
+                                 chunkbuffer = 10, cores = 4)
+
+filterz = function(las,minZ = 0, maxZ = 5){
+  las = readLAS(las)
+  if (is.empty(las)) return(NULL)
+  las = lidR::lasfilter(las, Z >=minZ & Z < maxZ)
+  grid = grid_metrics(las, res = 2, .stdmetrics_z)
+  grid = grid[[c(1,2,3,6,7)]] #
+  return(grid)
+}
+
+filteri = function(las,minZ = 0, maxZ = 5){
+  las = readLAS(las)
+  if (is.empty(las)) return(NULL)
+  las = lidR::lasfilter(las, Z >=minZ & Z < maxZ)
+  #grid = grid_metrics(las, res = 2, stdmetrics_i(Intensity))
+  #grid = grid[[c(1,2,3,4)]] #
+  return(las)
+}
+
+for(i in 1:length(las_files)){
+  las = readLAS(las_files[i])
+  #las = lidR::lasfilter(las, Z >=0 & Z < 50)
+  grid = grid_metrics(las, res = 2, .stdmetrics_i)
+  crs(grid) =proj4                
+  writeRaster(grid, filename = paste0("edu/mpg-envinsys-plygrnd/data/tmp/istats/",i,".tif"))
+}
+
+lidR::opt_output_files(mof_cat_csf)<-paste0(envrmt$path_data_lidar_height_level1,"{ID}_level1")
+level1 = lidR::catalog_apply(mof_cat_csf, filteri,0,1)
+
+lidR::opt_output_files(mof_cat_csf)<-paste0(envrmt$path_data_lidar_height_level2,"{ID}_level2")
+level2 = lidR::catalog_apply(mof_cat_csf, filteri,5,10)
+
+lidR::opt_output_files(mof_cat_csf)<-paste0(envrmt$path_data_lidar_height_level3,"{ID}_level3")
+level3 = lidR::catalog_apply(mof_cat_csf, filteri,10,15)
+
+lidR::opt_output_files(mof_cat_csf)<-paste0(envrmt$path_data_lidar_height_level4,"{ID}_level4")
+level4 = lidR::catalog_apply(mof_cat_csf, filteri,15,20)
+
+lidR::opt_output_files(mof_cat_csf)<-paste0(envrmt$path_data_lidar_height_level5,"{ID}_level5")
+level5 = lidR::catalog_apply(mof_cat_csf, filteri,20,25)
+
+lidR::opt_output_files(mof_cat_csf)<-paste0(envrmt$path_data_lidar_height_level6,"{ID}_level6")
+level6 = lidR::catalog_apply(mof_cat_csf, filteri,25,30)
+
+lidR::opt_output_files(mof_cat_csf)<-paste0(envrmt$path_data_lidar_height_level7,"{ID}_level7")
+level7 = lidR::catalog_apply(mof_cat_csf, filteri,30,50)
+
+
 # lidR::opt_output_files(mof_csf)<-paste0(envrmt$path_data_lidar_csf,"{ID}_pitfree_csf")
 # dsm_pitfree_csf <- lidR::grid_canopy(mof_csf, res = 0.5, 
 #                                      lidR::pitfree(c(0,2,5,10,15), c(0, 0.5)))

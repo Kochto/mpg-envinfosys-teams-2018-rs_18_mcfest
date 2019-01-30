@@ -1,3 +1,22 @@
+#mean intensity
+#crown height
+#crown slope
+#percentile heights lidr
+#mean hight of all first returns lidr
+#lasfilter funktion auf die flight number anwenden --> als raster rausschreiben --> 
+#dann zusammen mit dem entropy/return number raster stacken und rastercalculator entropy/flight number rechnen
+#lidr::entropy
+#lidr::grid_metrics
+#lidr::lasmetrics
+#lidr::lastrees
+#Baumschichten einteilen
+
+#https://github.com/GeoMOER-Students-Space/msc-phygeo-class-of-2017-creuden/blob/master/gis/gi-ws-08/scripts/gi-ws-08.R
+#https://grass.osgeo.org/grass76/manuals/r.in.lidar.html
+
+
+
+
 #Database of all sorts of indices calculated from satellite imagery
  https://www.indexdatabase.de/
 

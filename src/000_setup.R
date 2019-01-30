@@ -8,9 +8,12 @@ lapply(libs, require, character.only = TRUE)
 
 # Set project specific subfolders
 project_folders = c("data/",                                 # data folders
-                    "data/aerial/org/", "data/lidar/org/", "data/lidar/segtest/", "data/lidar/segtest/laubtest/", "data/lidar/segtest/nadeltest/",
+                    "data/aerial/org/", "data/lidar/org/", "data/lidar/org/extend/", "data/lidar/segtest/", "data/lidar/segtest/laubtest/", "data/lidar/segtest/nadeltest/",
                     "data/lidar/segtest/nadel_laub_test/", "data/lidar/org/corrected/", "data/lidar/norm/", 
-                    "data/lidar/hight/" , "data/lidar/height/level1/", "data/lidar/height/level2/", "data/lidar/height/level3/",
+                    "data/lidar/processed/", "data/lidar/processed/shannon/", "data/lidar/processed/zstats/", "data/lidar/processed/nreturns/", 
+                    "data/lidar/processed/density/", "data/lidar/processed/density/level1/", "data/lidar/processed/density/level2/", "data/lidar/processed/density/level3/",
+                    "data/lidar/processed/density/level4/", "data/lidar/processed/density/level5/", "data/lidar/processed/density/level6/", "data/lidar/processed/density/level7/",
+                    "data/lidar/height/level1/", "data/lidar/height/level2/", "data/lidar/height/level3/",
                     "data/lidar/height/level4/", "data/lidar/height/level5/", "data/lidar/height/level6/", "data/lidar/height/level7/",
                     "data/lidar/height/level8/", "data/lidar/height/level9/",
                     "data/grass/", 

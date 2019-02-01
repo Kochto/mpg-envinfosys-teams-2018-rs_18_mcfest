@@ -3,8 +3,8 @@
 #crown slope
 #percentile heights lidr
 #mean hight of all first returns lidr
-#lasfilter funktion auf die flight number anwenden --> als raster rausschreiben --> 
-#dann zusammen mit dem entropy/return number raster stacken und rastercalculator entropy/flight number rechnen
+#lasfilter funktion auf die flight number anwenden --> als raster rausschreiben --> dann zusammen mit dem entropy/return number raster stacken und rastercalculator entropy/flight number rechnen
+
 #lidr::entropy
 #lidr::grid_metrics
 #lidr::lasmetrics

@@ -10,14 +10,15 @@ lapply(libs, require, character.only = TRUE)
 project_folders = c("data/",                                 # data folders
                     "data/aerial/org/", "data/lidar/org/", "data/lidar/org/extend/", "data/lidar/segtest/", "data/lidar/segtest/laubtest/", "data/lidar/segtest/nadeltest/",
                     "data/lidar/segtest/nadel_laub_test/", "data/lidar/org/corrected/", "data/lidar/norm/", 
-                    "data/lidar/processed/", "data/lidar/processed/shannon/", "data/lidar/processed/zstats/", "data/lidar/processed/nreturns/", 
+                    "data/lidar/processed/", "data/lidar/processed/shannon/", "data/lidar/processed/zstats/", "data/lidar/processed/nreturns/", "data/lidar/processed/nreturns/level1/", "data/lidar/processed/nreturns/level2/",
+                    "data/lidar/processed/nreturns/level3/", "data/lidar/processed/nreturns/level4/",
                     "data/lidar/processed/density/", "data/lidar/processed/density/level1/", "data/lidar/processed/density/level2/", "data/lidar/processed/density/level3/",
                     "data/lidar/processed/density/level4/", "data/lidar/processed/density/level5/", "data/lidar/processed/density/level6/", "data/lidar/processed/density/level7/",
                     "data/lidar/height/level1/", "data/lidar/height/level2/", "data/lidar/height/level3/",
                     "data/lidar/height/level4/", "data/lidar/height/level5/", "data/lidar/height/level6/", "data/lidar/height/level7/",
                     "data/lidar/height/level8/", "data/lidar/height/level9/",
-                    "data/grass/", 
-                    "data/mof/", "data/tmp/", "data/aerial_processed/", "data/validation/", "data/validation/valtif/", "data/validation/valshp/",
+                    "data/grass/", "data/training/", 
+                    "data/mof/", "data/tmp/", "data/aerial_processed/", "data/aerial_processed/selection/", "data/validation/", "data/validation/valtif/", "data/validation/valshp/",
                     "data/validation/valres/",
                     "run/", "log/", "data/lidar/", "data/lidar/csf/", "data/plots/",                  # bins and logging
                     "mpg-envinfosys-teams-2018-rs_18_mcfest/src/",   # source code

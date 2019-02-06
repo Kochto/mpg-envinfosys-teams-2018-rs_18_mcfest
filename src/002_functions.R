@@ -1,4 +1,4 @@
-####indices function ####
+#####indices function ####
 #@https://github.com/environmentalinformatics-marburg/satelliteTools/blob/master/R/rgbIndices.R
 
 rgbIndices<- function(rgb,
@@ -171,7 +171,7 @@ rgbIndices<- function(rgb,
   return(raster::stack(indices))
 }
 
-####filter scratch####
+#####filter scratch####
 
 filter <- function(rs, fil=c("mean5", "mean15", "mean21", "mean31", "sobel5", "sobel15", "sobel21", "sobel31", 
                                 "gauss5", "gauss15", "gauss21", "gauss31", "LoG5", "LoG15", "LoG21", "LoG31")){
@@ -329,7 +329,7 @@ filter <- function(rs, fil=c("mean5", "mean15", "mean21", "mean31", "sobel5", "s
 #haralick 21 pix 10,5m
 #haralick 31 pix 15,5m
 
-####function segement test####
+#####function segement test####
 ft <- function(raster, mul, sum, minHeight, points, lay){
   
   pos <- ForestTools::vwf(raster, winFun = function(x){x * mul + sum}, 
@@ -382,3 +382,26 @@ ft <- function(raster, mul, sum, minHeight, points, lay){
   return(perf)
 }
 
+
+#####Pix extraction#####
+extraction <- function(shp, rasfiles){
+  ext_tab <- lapply(seq(length(shp)), function(i){
+    ext_ind <- lapply(seq(length(rasfiles)), function(x){
+      stack <- raster::stack(rasfiles[x])
+      ext <- raster::extract(stack, shp[[i]], na.rm = FALSE, df=TRUE)
+      cat("\n", rasfiles[x],
+          "\nShape:", shp[[i]]@data$type[1], 
+          "\nTif", x, "of 54 \n")
+      print(Sys.time())
+      return(ext)
+    })
+    tab <- do.call("cbind", ext_ind)
+    for (t in unique(tab$ID)){
+      tab$abt [tab$ID == t] <- shp[[i]]@data$abt[shp[[i]]@data$id == t]
+    }
+    #names(tab) <- paste0(names(tab), "_", shp[[i]]@data$type[1])
+    tab <- tab[!duplicated(as.list(names(tab)))]
+    tab$type <- shp[[i]]@data$type[1]
+    return(tab)
+  })
+}

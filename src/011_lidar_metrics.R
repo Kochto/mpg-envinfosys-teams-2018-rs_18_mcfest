@@ -132,9 +132,15 @@ writeRaster(ent4, filename = paste0(envrmt$path_data_lidar_processed_shannon, "l
 
 #####Height-Stats#####
 lidR::opt_output_files(mof_cat_csf)<-paste0(envrmt$path_data_lidar_processed_zstats,"{ID}_zstats")
-zstats = lidR::grid_metrics(mof_cat_csf,.stdmetrics_z, res = 2, start = c(0,0))
+zstats <- lidR::grid_metrics(mof_cat_csf,.stdmetrics, res = 2, start = c(0,0))
 writeRaster(zstats, filename = paste0(envrmt$path_data_lidar_processed_zstats,"zstats_allLevels.tif"))
 stack(paste0(envrmt$path_data_lidar_processed_zstats, "zstats_allLevels.tif"))
+
+lidR::opt_output_files(mof_cat_csf)<-paste0(envrmt$path_data_lidar_processed,"treestats/{ID}_treestats")
+treetstats = lidR::grid_metrics(mof_cat_csf,.stdtreemetrics, res = 2, start = c(0,0))#ReturnNumber not found
+writeRaster(treetstats, filename = paste0(envrmt$path_data_lidar_prc,"treestats_allLevels.tif"))
+
+t = lidR::grid_metrics(mof_cat_csf, .stdmetrics, res = 2, start = c(0,0))
 
 #####Number of Returns#####
 #All

@@ -132,9 +132,13 @@ writeRaster(ent4, filename = paste0(envrmt$path_data_lidar_processed_shannon, "l
 
 #####Height-Stats#####
 lidR::opt_output_files(mof_cat_csf)<-paste0(envrmt$path_data_lidar_processed_zstats,"{ID}_zstats")
-zstats <- lidR::grid_metrics(mof_cat_csf,.stdmetrics, res = 2, start = c(0,0))
-writeRaster(zstats, filename = paste0(envrmt$path_data_lidar_processed_zstats,"zstats_allLevels.tif"))
-stack(paste0(envrmt$path_data_lidar_processed_zstats, "zstats_allLevels.tif"))
+zstats <- lidR::grid_metrics(mof_cat_csf,.stdmetrics_z, res = 2, start = c(0,0))
+names(zstats) <- c("zmax", "zmean", "zsd", "zskew", "zkurt", "zentropy", "pzabovezmean", "pzabove2", "zq5", "zq10", 
+                   "zq15", "zq20", "zq25", "zq30", "zq35", "zq40", "zq45", "zq50", "zq55", "zq60", "zq65", "zq70",
+                   "zq75", "zq80", "zq85", "zq90", "zq95", "zpcum1", "zpcum2", "zpcum3", "zpcum4", "zpcum5", "zpcum6",
+                   "zpcum7", "zpcum8", "zpcum9")
+saveRDS(zstats, paste0(envrmt$path_data_lidar_processed_zstats,"zstats.rds"))
+x <- readRDS(paste0(envrmt$path_data_lidar_processed_zstats,"zstats.rds"))
 
 lidR::opt_output_files(mof_cat_csf)<-paste0(envrmt$path_data_lidar_processed,"treestats/{ID}_treestats")
 treetstats = lidR::grid_metrics(mof_cat_csf,.stdtreemetrics, res = 2, start = c(0,0))#ReturnNumber not found

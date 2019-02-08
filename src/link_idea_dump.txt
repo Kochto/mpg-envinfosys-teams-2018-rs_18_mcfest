@@ -66,3 +66,11 @@ https://github.com/environmentalinformatics-marburg/satelliteTools/blob/master/R
 #haralick 15 pix 7,5m
 #haralick 21 pix 10,5m
 #haralick 31 pix 15,5m
+
+
+#Mod1: Ohne Seed mit Eschen, ohne Lärchen, 80/20
+#Mod2: Mit seed 332211, mit eschen und lärchen, 1000 von jeder art
+#Mod3: Mit seed 332211, Ohne Eschen mit lärchen, 80/20, 10.000 smp size
+#Mod4: Mit seed 1899, ohne Eschen mit lärchen, 80/20, 20.000 smp size
+#Mod5: Mit seed 1899, ohne Eschen mit lärchen, 80/20, 80/20 Laub zu Nadelwaldverhältnis, 20% der Pix jedes Features ist ins training gegangen
+#Mod6: Mit seed 1899, ohne Eschen mit lärchen, 80/20, 80/20 Laub zu Nadelwaldverhältnis, ohne createSpacetimefolds über Abt, 20% der Pix jedes Features ist ins training gegangen

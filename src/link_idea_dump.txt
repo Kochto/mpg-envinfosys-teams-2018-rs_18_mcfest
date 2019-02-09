@@ -29,44 +29,6 @@ https://github.com/environmentalinformatics-marburg/satelliteTools/blob/master/R
  http://digitalcommons.unl.edu/cgi/viewcontent.cgi?article=2161&context=usdaarsfacpub
 
 
-#Also DEM from LIDAR will be useful.
-
-#Filter Ideas
-#mean 5 pix 2,5m
-#mean 15 pix 7,5m
-#mean 21 pix 10,5m
-#mean 31 pix 15,5m
-
-#sobel 5 pix 2,5m
-#sobel 15 pix 7,5m
-#sobel 21 pix 10,5m
-#sobel 31 pix 15,5m
-
-#gauss 5 pix 2,5m
-#gauss 15 pix 7,5m
-#gauss 21 pix 10,5m
-#gauss 31 pix 15,5m
-
-#laplace 5 pix 2,5m
-#laplace 15 pix 7,5m
-#laplace 21 pix 10,5m
-#laplace 31 pix 15,5m
-
-#glcm1 5 pix 2,5m
-#glcm1 15 pix 7,5m
-#glcm1 21 pix 10,5m
-#glcm1 31 pix 15,5m
-
-#glcm2 5 pix 2,5m
-#glcm2 15 pix 7,5m
-#glcm2 21 pix 10,5m
-#glcm2 31 pix 15,5m
-
-#haralick 5 pix 2,5m
-#haralick 15 pix 7,5m
-#haralick 21 pix 10,5m
-#haralick 31 pix 15,5m
-
 
 #Mod1: Ohne Seed mit Eschen, ohne Lärchen, 80/20
 #Mod2: Mit seed 332211, mit eschen und lärchen, 1000 von jeder art
@@ -74,3 +36,5 @@ https://github.com/environmentalinformatics-marburg/satelliteTools/blob/master/R
 #Mod4: Mit seed 1899, ohne Eschen mit lärchen, 80/20, 20.000 smp size
 #Mod5: Mit seed 1899, ohne Eschen mit lärchen, 80/20, 80/20 Laub zu Nadelwaldverhältnis, 20% der Pix jedes Features ist ins training gegangen
 #Mod6: Mit seed 1899, ohne Eschen mit lärchen, 80/20, 80/20 Laub zu Nadelwaldverhältnis, ohne createSpacetimefolds über Abt, 20% der Pix jedes Features ist ins training gegangen
+
+#Prop Quality nach Baumarten aufschlüsseln

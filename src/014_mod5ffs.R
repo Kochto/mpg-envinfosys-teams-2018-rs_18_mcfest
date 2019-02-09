@@ -6,6 +6,7 @@ source(paste0(root_folder, "/mpg-envinfosys-teams-2018-rs_18_mcfest/src/000_setu
 traindat_all_2 <- read.csv(file = paste0(envrmt$path_data_training, "traindat_all_2.csv"), header = TRUE, sep = ";", dec = ".")
 traindat_all_2 <- traindat_all_2[!traindat_all_2$type == "ESH",]
 traindat_all_2$type <- droplevels(traindat_all_2$type)
+traindat_all_2$runnum  <- 1:nrow(traindat_all_2)
 
 bu  <- traindat_all_2$runnum[traindat_all_2$ID %in% c(33, 14, 25, 42, 49, 28, 8, 56, 2) & traindat_all_2$type == "BU"]
 tei  <- traindat_all_2$runnum[traindat_all_2$ID %in% c(14, 26, 2, 10, 6, 21, 17) & traindat_all_2$type == "TEI"]
@@ -53,6 +54,5 @@ conf <- caret::confusionMatrix(test, traindat_all_2$type[smp])
 
 rasfiles <- list.files(paste0(envrmt$path_data_aerial_processed_selection), pattern = "*.tif", full.names = TRUE)
 sta <- stack(rasfiles)
-
 areapred <- raster::predict(sta[[-6]], mod5)
 writeRaster(areapred, paste0(envrmt$path_data_training, "areapredmod5.tif"), overwrite = TRUE)

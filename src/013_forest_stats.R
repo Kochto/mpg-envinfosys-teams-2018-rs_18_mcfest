@@ -7,7 +7,6 @@ source(paste0(root_folder, "/mpg-envinfosys-teams-2018-rs_18_mcfest/src/000_setu
 # dat <- data.frame(ID=c(1:79990))
 # cent <- SpatialPointsDataFrame(coords=cent, data = dat)
 # writeOGR(cent, paste0(envrmt$path_data_mof, "centroids.shp"), layer = "centroids", driver = "ESRI Shapefile")
-
 cseg <- raster::shapefile(paste0(envrmt$path_data_mof, "cseg55.shp"))
 cent <- raster::shapefile(paste0(envrmt$path_data_mof, "centroids.shp"))
 abt <- raster::shapefile(paste0(envrmt$path_data_mof, "uwcWaldorte.shp"))
@@ -66,7 +65,6 @@ ges@data$P_RSC_sp[ges@data$FE_DWBAGRP == "EI"] <- (sum(area(ei)) - sum(area(int_
 writeOGR(ges, dsn = paste0(envrmt$path_data_mof, "hor_p_metrics.shp"), layer = "hor_p_metrics", 
          driver = "ESRI Shapefile", overwrite_layer = TRUE)
 
-
 ####Ratio of soil pixels to crown pixels per Forest Section####
 ges@data$P_RSC <- 1
 for (l in seq(length(ges))){
@@ -74,5 +72,3 @@ for (l in seq(length(ges))){
   ges@data[l, "P_RSC"] <- (area(ges[l,]) - sum(area(int))) / sum(area(int))
   print(l)
 }
-writeOGR(ges, dsn = paste0(envrmt$path_data_mof, "hor_p_metrics.shp"), layer = "hor_p_metrics", 
-         driver = "ESRI Shapefile", overwrite_layer = TRUE)

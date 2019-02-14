@@ -28,6 +28,9 @@ https://github.com/environmentalinformatics-marburg/satelliteTools/blob/master/R
 #Indices explained
  http://digitalcommons.unl.edu/cgi/viewcontent.cgi?article=2161&context=usdaarsfacpub
 
+Variable Importance:
+https://www.displayr.com/how-is-variable-importance-calculated-for-a-random-forest/
+
 
 
 #Mod1: Ohne Seed mit Eschen, ohne Lärchen, 80/20
@@ -36,5 +39,25 @@ https://github.com/environmentalinformatics-marburg/satelliteTools/blob/master/R
 #Mod4: Mit seed 1899, ohne Eschen mit lärchen, 80/20, 20.000 smp size
 #Mod5: Mit seed 1899, ohne Eschen mit lärchen, 80/20, 80/20 Laub zu Nadelwaldverhältnis, 20% der Pix jedes Features ist ins training gegangen
 #Mod6: Mit seed 1899, ohne Eschen mit lärchen, 80/20, 80/20 Laub zu Nadelwaldverhältnis, ohne createSpacetimefolds über Abt, 20% der Pix jedes Features ist ins training gegangen
-
+#Mod7: Mit seed 1899, ohne Eschen mit lärchen, 1000 pixel jeder art, 20% der Pix jedes Features ist ins training gegangen
 #Prop Quality nach Baumarten aufschlüsseln
+
+#Modell vorhersagen plotten #fertig
+
+hor_p_metrics
+#P_SP_ha: Species Density per Ha
+#P_FS_ha: Centroids per Forest section
+#P_RSC_s: Ratio of soil pixels to crown pixels per Species
+#P_RSC_f: Ratio of soil pixels to crown pixels per Forest Section
+#acc_f_6: Accurracy of species classification on each forest section ex. 60 BU's/100 Trees in a BU section = 60%
+#acc_f_7: Accurracy of species classification on each forest section ex. 60 BU's/100 Trees in a BU section = 60%
+
+cseg_stats_modX
+prop: percentage of one species "won" the polygon #fertig
+
+Tabellenform:
+spc_c_6: Species detection accurracy of mod 6 #fertig
+spc_c_7: Species detection accurracy of mod 7 #fertig
+
+Bescheibung der Waldparameter rein methodisch aufziehen - XY und Z war möglich aus den Daten zu generieren, wie war es möglich manche Daten zu genereien?
+

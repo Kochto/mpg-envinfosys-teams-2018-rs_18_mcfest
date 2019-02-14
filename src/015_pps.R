@@ -4,7 +4,7 @@ root_folder <- envimaR::alternativeEnvi(root_folder = "~/edu/mpg-envinsys-plygrn
 source(paste0(root_folder, "/mpg-envinfosys-teams-2018-rs_18_mcfest/src/000_setup.R"))
 
 
-areapredict <- raster::raster(paste0(envrmt$path_data_training, "areapredmod6.tif"))
+areapredict <- raster::raster(paste0(envrmt$path_data_training, "areapredmod9.tif"))
 #areapredict <- raster::projectRaster(areapredict, " +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")
 # cseg <- raster::shapefile(paste0(envrmt$path_data_mof, "cseg55.shp"))
 # cseg <- subset(cseg, !treeID %in% c(64894,48007))
@@ -52,4 +52,4 @@ spec <- do.call(rbind, spec)
 props$spec <- spec[,1]
 #45581
 props <- props[-which(props$segid %in% c(48007, 64894)),] #correct props
-write.table(x = props, file = paste0(envrmt$path_data_training, "props_mod6.csv"), sep = ";", dec = ".")
+write.table(x = props, file = paste0(envrmt$path_data_training, "props_mod9.csv"), sep = ";", dec = ".")

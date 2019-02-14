@@ -62,12 +62,15 @@ print(Sys.time())
 gc()
 
 mod7 <- readRDS(paste0(envrmt$path_data_training, "mod7.rds"))
+caret::varImp(mod7)
+
 
 traindat_1000 <- read.csv(paste0(envrmt$path_data_training, "traindat_1000_size_mod7.csv"), sep = ";")
 traindat_test <- traindat_all_2[-traindat_1000$runnum,]
 
 test <- predict(mod7, traindat_test)
 conf <- caret::confusionMatrix(test, traindat_test$type)
+saveRDS(conf, paste0(envrmt$path_data_training, "confmod7.rds"))
 
 areapred <- raster::predict(sta[[-6]], mod7)
 writeRaster(areapred, paste0(envrmt$path_data_training, "areapredmod7.tif"), overwrite = TRUE)
